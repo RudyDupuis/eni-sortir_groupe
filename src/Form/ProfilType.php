@@ -30,7 +30,7 @@ class ProfilType extends AbstractType
                 'label' => 'Nom'
             ])
             ->add('prenom', TextType::class, [
-                'label' => 'Prenom'
+                'label' => 'Prénom'
             ])
             ->add('telephone', TextType::class, [
                 'label' => 'Téléphone'
