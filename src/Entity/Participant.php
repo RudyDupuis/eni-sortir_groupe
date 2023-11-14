@@ -32,6 +32,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, unique: true)]
     private ?string $pseudo = null;
 
+
+
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
@@ -215,6 +217,16 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
         $this->actif = $actif;
 
         return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(?string $pseudo): void
+    {
+        $this->pseudo = $pseudo;
     }
 
     public function getCampus(): ?Campus
