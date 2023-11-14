@@ -2,14 +2,11 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Campus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Participant;
 use Faker\Factory;
-use phpDocumentor\Reflection\Types\This;
-
 
 class ParticipantFixtures extends Fixture implements DependentFixtureInterface
 
@@ -23,9 +20,8 @@ class ParticipantFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
-        for ($i = 0; $i < 5; $i++){
+        for ($i = 0; $i < 5; $i++) {
             $campusReferences[] = $this->campusFixtures->getReference('campus' . $i);
-
         }
 
 
