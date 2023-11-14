@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ParticipantRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -27,6 +29,9 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $motPasse = null;
 
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $pseudo = null;
+
     #[ORM\Column(length: 255)]
     private ?string $nom = null;
 
@@ -41,6 +46,22 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column]
     private ?bool $actif = null;
+
+    #[ORM\ManyToOne(inversedBy: 'participants')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Campus $campus = null;
+
+    #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participants')]
+    private Collection $estInscrit;
+
+    #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Sortie::class, orphanRemoval: true)]
+    private Collection $estOrganisateur;
+
+    public function __construct()
+    {
+        $this->estInscrit = new ArrayCollection();
+        $this->estOrganisateur = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -99,6 +120,11 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
+    public function getPassword(): string
+    {
+        return $this->getMotPasse();
+    }
+
     public function getMotPasse(): string
     {
         return $this->motPasse;
@@ -187,6 +213,72 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActif(bool $actif): static
     {
         $this->actif = $actif;
+
+        return $this;
+    }
+
+    public function getCampus(): ?Campus
+    {
+        return $this->campus;
+    }
+
+    public function setCampus(?Campus $campus): static
+    {
+        $this->campus = $campus;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getEstInscrit(): Collection
+    {
+        return $this->estInscrit;
+    }
+
+    public function addEstInscrit(Sortie $estInscrit): static
+    {
+        if (!$this->estInscrit->contains($estInscrit)) {
+            $this->estInscrit->add($estInscrit);
+        }
+
+        return $this;
+    }
+
+    public function removeEstInscrit(Sortie $estInscrit): static
+    {
+        $this->estInscrit->removeElement($estInscrit);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Sortie>
+     */
+    public function getEstOrganisateur(): Collection
+    {
+        return $this->estOrganisateur;
+    }
+
+    public function addEstOrganisateur(Sortie $estOrganisateur): static
+    {
+        if (!$this->estOrganisateur->contains($estOrganisateur)) {
+            $this->estOrganisateur->add($estOrganisateur);
+            $estOrganisateur->setOrganisateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEstOrganisateur(Sortie $estOrganisateur): static
+    {
+        if ($this->estOrganisateur->removeElement($estOrganisateur)) {
+            // set the owning side to null (unless already changed)
+            if ($estOrganisateur->getOrganisateur() === $this) {
+                $estOrganisateur->setOrganisateur(null);
+            }
+        }
 
         return $this;
     }
