@@ -6,6 +6,7 @@ use App\Repository\LieuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LieuRepository::class)]
 class Lieu
@@ -15,21 +16,29 @@ class Lieu
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: "Le nom ne doit pas être vide.")]
+    #[Assert\Length(max: 100, maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères.")]
     #[ORM\Column(length: 100)]
     private ?string $nom = null;
 
+    #[Assert\NotBlank(message: "La rue ne doit pas être vide.")]
+    #[Assert\Length(max: 100, maxMessage: "La rue ne doit pas dépasser {{ limit }} caractères.")]
     #[ORM\Column(length: 100)]
     private ?string $rue = null;
 
+    #[Assert\NotNull(message: "La latitude ne doit pas être vide.")]
     #[ORM\Column(nullable: true)]
     private ?float $latitude = null;
 
+    #[Assert\NotNull(message: "La longitude ne doit pas être vide.")]
     #[ORM\Column(nullable: true)]
     private ?float $longitude = null;
 
+    #[Assert\NotNull(message: "La ville ne doit pas être vide.")]
     #[ORM\ManyToOne(inversedBy: 'lieux')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Ville $ville = null;
+
 
     #[ORM\OneToMany(mappedBy: 'lieu', targetEntity: Sortie::class)]
     private Collection $sorties;
@@ -134,3 +143,4 @@ class Lieu
         return $this;
     }
 }
+
