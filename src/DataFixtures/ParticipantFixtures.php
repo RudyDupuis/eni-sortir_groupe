@@ -7,16 +7,20 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Participant;
 use Faker\Factory;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ParticipantFixtures extends Fixture implements DependentFixtureInterface
 
 {
     private $campusFixtures;
+    private $passwordHasher;
 
-    public function __construct(CampusFixtures $campusFixtures)
+    public function __construct(CampusFixtures $campusFixtures, UserPasswordHasherInterface $passwordHasher)
     {
         $this->campusFixtures = $campusFixtures;
+        $this->passwordHasher = $passwordHasher;
     }
+
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('fr_FR');
@@ -29,7 +33,11 @@ class ParticipantFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 0; $i < 10; $i++) {
             $participant = new Participant();
             $participant->setMail($faker->email);
-            $participant->setMotPasse('12345678');
+
+            // Hachage du mot de passe
+            $hashedPassword = $this->passwordHasher->hashPassword($participant, '12345678');
+            $participant->setMotPasse($hashedPassword);
+
             $participant->setPseudo($faker->userName);
             $participant->setNom($faker->lastName);
             $participant->setPrenom($faker->firstName);
