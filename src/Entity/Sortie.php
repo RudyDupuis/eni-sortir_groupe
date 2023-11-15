@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SortieRepository::class)]
 class Sortie
@@ -16,28 +17,38 @@ class Sortie
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 50)]
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
+    #[Assert\NotNull]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateHeureDebut = null;
 
+    #[Assert\NotNull]
+    #[Assert\Range(min: 1, max: 350)]
     #[ORM\Column]
     private ?int $duree = null;
 
+    #[Assert\NotNull]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateLimiteInscription = null;
 
+    #[Assert\NotNull]
+    #[Assert\Range(min: 1, max: 30)]
     #[ORM\Column]
     private ?int $nbInscriptionsMax = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $infosSortie = null;
 
+    #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Lieu $lieu = null;
 
+    #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Campus $siteOrganisateur = null;
@@ -45,10 +56,12 @@ class Sortie
     #[ORM\ManyToMany(targetEntity: Participant::class, mappedBy: 'estInscrit')]
     private Collection $participants;
 
+    #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'estOrganisateur')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Participant $organisateur = null;
 
+    #[Assert\NotNull]
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Etat $etat = null;
