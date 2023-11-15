@@ -15,6 +15,8 @@ class Campus
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'Le nom du campus ne doit pas être vide.')]
+    #[Assert\Choice(choices: ['Nantes', 'Niort', 'En ligne', 'Quimper', 'Rennes'], message: 'Vous devez choisir un Campus qui existe.')]
     #[ORM\Column(length: 30, unique: true)]
     private ?string $nom = null;
 
