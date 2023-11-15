@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[UniqueEntity(fields:"pseudo", message:"Ce pseudo est déjà utilisé.")]
@@ -20,24 +21,43 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message:"Le mail est requis.")]
+    #[Assert\Email(message:"L'email '{{ value }}' n'est pas valide.")]
+    #[Assert\Length(max:180, maxMessage: "Le mail ne peut pas dépasser 180 carcatères")]
     private ?string $mail = null;
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message:"Le mot de passe est requis.")]
+    #[Assert\Length(min:8, max:255, minMessage:"Le mot de passe doit avoir au moins 8 caractères.")]
+//    #[Assert\Regex(
+//        pattern:"/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]+$/",
+//        message:"Le mot de passe doit contenir au moins une lettre, un chiffre et un caractère spécial.")]
     private ?string $motPasse = null;
 
-    #[ORM\Column(length: 180, unique: true)]
+    #[ORM\Column(length: 30, unique: true)]
+    #[Assert\NotBlank(message:"Le pseudo ne peut pas être vide.")]
+    #[Assert\Length(min:3, max:30,
+        minMessage: "Le pseudo ne peut pas faire moins de 3 caractères.",
+        maxMessage:"Le pseudo ne peut pas dépasser 30 caractères.")]
     private ?string $pseudo = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[Assert\Length(min:3, max:50,
+        minMessage: "Le nom ne peut pas faire moins de 3 caractères.",
+        maxMessage:"Le nom ne peut pas dépasser 50 caractères.")]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 50)]
+    #[Assert\Length(min:3, max:50,
+        minMessage: "Le prénom ne peut pas faire moins de 3 caractères.",
+        maxMessage:"Le prénom ne peut pas dépasser 50 caractères.")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Length(max:20, maxMessage:"Le numéro de téléphone ne peut pas dépasser 20 caractères.")]
     private ?string $telephone = null;
 
     #[ORM\Column]
