@@ -76,3 +76,4 @@ class Etat
         return $this;
     }
 }
+
