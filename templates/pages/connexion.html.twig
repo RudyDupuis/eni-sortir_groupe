@@ -18,6 +18,12 @@
         <input type="password" name="password" id="inputPassword" class="ml-32" required>
     </div>
 
+{# le temps de connexion du remember me est reglable dans le yaml #}
+    <div>
+        <input type="checkbox" id="remember_me" name="_remember_me" />
+        <label for="remember_me">Se souvenir de moi</label>
+    </div>
+
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
