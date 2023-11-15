@@ -20,16 +20,13 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $mail = null;
 
-
-    private array $roles = [];
-
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
     private ?string $motPasse = null;
 
-    #[ORM\Column(length: 255, unique: true)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255)]
@@ -52,15 +49,15 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Campus $campus = null;
 
     #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participants')]
-    private Collection $estInscrit;
+    private Collection $sortiesInscrites;
 
     #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Sortie::class, orphanRemoval: true)]
-    private Collection $estOrganisateur;
+    private Collection $sortiesOrganisees;
 
     public function __construct()
     {
-        $this->estInscrit = new ArrayCollection();
-        $this->estOrganisateur = new ArrayCollection();
+        $this->sortiesInscrites = new ArrayCollection();
+        $this->sortiesOrganisees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -103,19 +100,11 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
 
     /**
      * @see PasswordAuthenticatedUserInterface
@@ -242,23 +231,23 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Sortie>
      */
-    public function getEstInscrit(): Collection
+    public function getSortiesInscrites(): Collection
     {
-        return $this->estInscrit;
+        return $this->sortiesInscrites;
     }
 
-    public function addEstInscrit(Sortie $estInscrit): static
+    public function addSortiesInscrites(Sortie $sortiesInscrites): static
     {
-        if (!$this->estInscrit->contains($estInscrit)) {
-            $this->estInscrit->add($estInscrit);
+        if (!$this->sortiesInscrites->contains($sortiesInscrites)) {
+            $this->sortiesInscrites->add($sortiesInscrites);
         }
 
         return $this;
     }
 
-    public function removeEstInscrit(Sortie $estInscrit): static
+    public function removeSortiesInscrites(Sortie $sortiesInscrites): static
     {
-        $this->estInscrit->removeElement($estInscrit);
+        $this->sortiesInscrites->removeElement($sortiesInscrites);
 
         return $this;
     }
@@ -266,27 +255,27 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Sortie>
      */
-    public function getEstOrganisateur(): Collection
+    public function getSortiesOrganisees(): Collection
     {
-        return $this->estOrganisateur;
+        return $this->sortiesOrganisees;
     }
 
-    public function addEstOrganisateur(Sortie $estOrganisateur): static
+    public function addSortiesOrganisees(Sortie $sortiesOrganisees): static
     {
-        if (!$this->estOrganisateur->contains($estOrganisateur)) {
-            $this->estOrganisateur->add($estOrganisateur);
-            $estOrganisateur->setOrganisateur($this);
+        if (!$this->sortiesOrganisees->contains($sortiesOrganisees)) {
+            $this->sortiesOrganisees->add($sortiesOrganisees);
+            $sortiesOrganisees->setOrganisateur($this);
         }
 
         return $this;
     }
 
-    public function removeEstOrganisateur(Sortie $estOrganisateur): static
+    public function removeSortiesOrganisees(Sortie $sortiesOrganisees): static
     {
-        if ($this->estOrganisateur->removeElement($estOrganisateur)) {
+        if ($this->sortiesOrganisees->removeElement($sortiesOrganisees)) {
             // set the owning side to null (unless already changed)
-            if ($estOrganisateur->getOrganisateur() === $this) {
-                $estOrganisateur->setOrganisateur(null);
+            if ($sortiesOrganisees->getOrganisateur() === $this) {
+                $sortiesOrganisees->setOrganisateur(null);
             }
         }
 
