@@ -3,7 +3,19 @@
 {% block title %}Accueil {% endblock %}
 
 {% block body %}
-<div class="f a-cent j-cent">
-    <h1>Accueil </h1>
-</div>
+
+    <div class="f a-cent j-cent">
+        <h1>Accueil </h1>
+    </div>
+
+    <div class="f a-end j-end">
+        <p>Date du jour : {{ currentDate|date("m/d/Y") }}</p>
+
+        {% if user %}
+            <p>Participant : {{ user.getPrenom() }} {{ user.getNom()|slice(0, 1) }}.</p>
+        {% endif %}
+    </div>
+
+
+
 {% endblock %}

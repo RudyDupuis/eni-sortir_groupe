@@ -205,25 +205,38 @@ button:hover {
 }
 
 /****** Componants *****/
+
 /*** Main ***/
 main {
     min-height: calc(100vh - 160px);
     padding: 32px 10%;
 }
 
-/*** Nav ***/
-nav {
-    height: 100px;
-    /* TODO */
-}
-
-
 /*** Footer ***/
 footer {
     height: 60px;
-    /* TODO */
+    background-color: #f0f0f0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+/*** Header ***/
+header {
+    padding: 10px 20px;
+}
+
+header img {
+    height: 70px;
+}
+
+/*** Nav ***/
+nav {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+}
 
 
 
