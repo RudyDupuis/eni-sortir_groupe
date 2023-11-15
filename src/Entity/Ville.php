@@ -22,13 +22,8 @@ class Ville
     private ?string $nom = null;
 
     #[Assert\NotBlank(message: "Le code postal ne doit pas être vide.")]
-    #[Assert\Range(
-        min: 00000,
-        max: 99999,
-        notInRangeMessage: "Le code postal doit être compris entre {{ min }} et {{ max }}.",
-        invalidMessage: "Le code postal doit être numérique."
-    )]
-    #[ORM\Column]
+    #[Assert\Length(max: 5, maxMessage: "Le code Postal ne doit pas dépasser {{ limit }} caractères.")]
+    #[ORM\Column(length: 5)]
     private ?string $codePostal = null;
 
     #[ORM\OneToMany(mappedBy: 'ville', targetEntity: Lieu::class, orphanRemoval: true)]
@@ -98,4 +93,3 @@ class Ville
         return $this;
     }
 }
-
