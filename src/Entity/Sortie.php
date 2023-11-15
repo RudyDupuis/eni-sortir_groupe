@@ -17,38 +17,44 @@ class Sortie
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 50)]
+    #[Assert\NotBlank(message: "Le nom ne doit pas être vide.")]
+    #[Assert\Length(max: 50, maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères.")]
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message: "La date et l'heure de début ne doivent pas être vides.")]
+    #[Assert\DateTime(message: "La date et l'heure de début doivent être au format datetime.")]
+    #[Assert\GreaterThanOrEqual("today", message: "La date et l'heure de début doivent être postérieures à la date actuelle.")]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateHeureDebut = null;
 
-    #[Assert\NotNull]
-    #[Assert\Range(min: 1, max: 350)]
+    #[Assert\NotNull(message: "La durée ne doit pas être vide.")]
+    #[Assert\Range(min: 1, max: 350, notInRangeMessage: "La durée doit être comprise entre {{ min }} et {{ max }} minutes.")]
     #[ORM\Column]
     private ?int $duree = null;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message: "La date limite d'inscription ne doit pas être vide.")]
+    #[Assert\Date(message: "La date limite d'inscription doit être au format date.")]
+    #[Assert\LessThan(propertyPath: "dateHeureDebut", message: "La date limite d'inscription doit être antérieure à la date et l'heure de début de la sortie.")]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateLimiteInscription = null;
 
-    #[Assert\NotNull]
-    #[Assert\Range(min: 1, max: 30)]
+    #[Assert\NotNull(message: "Le nombre maximum d'inscriptions ne doit pas être vide.")]
+    #[Assert\Range(min: 1, max: 30, notInRangeMessage: "Le nombre maximum d'inscriptions doit être compris entre {{ min }} et {{ max }}.")]
     #[ORM\Column]
     private ?int $nbInscriptionsMax = null;
 
+    #[Assert\NotBlank(message: "Les informations sur la sortie ne doivent pas être vides.")]
+    #[Assert\Length(max: 255, maxMessage: "Les informations sur la sortie ne doivent pas dépasser {{ limit }} caractères.")]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $infosSortie = null;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message: "Le lieu ne doit pas être vide.")]
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Lieu $lieu = null;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message: "Le site organisateur ne doit pas être vide.")]
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Campus $siteOrganisateur = null;
@@ -56,12 +62,12 @@ class Sortie
     #[ORM\ManyToMany(targetEntity: Participant::class, mappedBy: 'estInscrit')]
     private Collection $participants;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message: "L'organisateur ne doit pas être vide.")]
     #[ORM\ManyToOne(inversedBy: 'estOrganisateur')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Participant $organisateur = null;
 
-    #[Assert\NotNull]
+    #[Assert\NotNull(message: "L'état ne doit pas être vide.")]
     #[ORM\ManyToOne(inversedBy: 'sorties')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Etat $etat = null;

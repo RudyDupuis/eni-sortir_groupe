@@ -16,8 +16,8 @@ class Etat
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 50)]
+    #[Assert\NotBlank(message: 'Le libellé ne doit pas être vide.')]
+    #[Assert\Length(max: 50, maxMessage: 'Le libellé ne doit pas dépasser {{ limit }} caractères.')]
     #[ORM\Column(length: 50)]
     private ?string $libelle = null;
 
@@ -76,4 +76,3 @@ class Etat
         return $this;
     }
 }
-

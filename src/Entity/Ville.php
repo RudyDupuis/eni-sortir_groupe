@@ -16,13 +16,18 @@ class Ville
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 100)]
+    #[Assert\NotBlank(message: "Le nom ne doit pas être vide.")]
+    #[Assert\Length(max: 100, maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères.")]
     #[ORM\Column(length: 100)]
     private ?string $nom = null;
 
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 5)]
+    #[Assert\NotBlank(message: "Le code postal ne doit pas être vide.")]
+    #[Assert\Range(
+        min: 00000,
+        max: 99999,
+        notInRangeMessage: "Le code postal doit être compris entre {{ min }} et {{ max }}.",
+        invalidMessage: "Le code postal doit être numérique."
+    )]
     #[ORM\Column]
     private ?string $codePostal = null;
 
