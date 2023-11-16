@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class ParticipantController extends AbstractController
@@ -42,34 +43,41 @@ class ParticipantController extends AbstractController
     public function profil(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         $participant = $this->getUser(); // Récupérer l'utilisateur connecté
-        $participantForm = $this->createForm(ProfilType::class, $participant);
-        $participantForm->handleRequest($request);
+        // Vérifier si l'utilisateur est connecté
+        if ($participant instanceof PasswordAuthenticatedUserInterface) {
+            $participantForm = $this->createForm(ProfilType::class, $participant);
+            $participantForm->handleRequest($request);
 
-        if ($participantForm->isSubmitted() && $participantForm->isValid()) {
-            $formData = $participantForm->getData();
+                if ($participantForm->isSubmitted() && $participantForm->isValid()) {
+                    $formData = $participantForm->getData();
 
-            // Vérifier si le mot de passe a été modifié
-            $champPassword = $participantForm->get('motPasse')->getData();
-            if (!empty($champPassword)) {
-                //Vérifier si les mots de passes correspondent
-                if ($champPassword !== $participantForm->get('motPasse')->getData()) {
-                    $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
-                    return $this->redirectToRoute('app_profil');
+                    // Vérifier si le mot de passe a été modifié
+                    $champPassword = $participantForm->get('motPasse')->getData();
+                    if (!empty($champPassword)) {
+                        //Vérifier si les mots de passes correspondent
+                        if ($champPassword !== $participantForm->get('motPasse')->getData()) {
+                            $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+                            return $this->redirectToRoute('app_profil');
+                        }
+
+                        // Hachage du mot de passe
+                        $hashedPassword = $passwordHasher->hashPassword(user: $participant, plainPassword: $champPassword);
+                        $participant->setMotPasse($hashedPassword);
+                    }
+                    $entityManager->persist($participant);
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Vos informations ont été mises à jour avec succès.');
+
+                    return $this->redirectToRoute('app_accueil');
                 }
-
-                // Hachage du mot de passe
-                $hashedPassword = $passwordHasher->hashPassword($participant, $champPassword);
-                $participant->setMotPasse($hashedPassword);
-            }
-            $entityManager->persist($participant);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Vos informations ont été mises à jour avec succès.');
-
-            return $this->redirectToRoute('app_accueil');
+        } else {
+            // Si l'utilisateur n'est pas connecté
+            return $this->redirectToRoute('app_login');
         }
         return $this->render('pages/profil.html.twig', [
             'participantForm' => $participantForm->createView()
         ]);
     }
 }
+
