@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Data\SearchData;
+use App\Form\SearchForm;
+use App\Repository\CampusRepository;
 use App\Repository\SortieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SortieController extends AbstractController
 {
     #[Route('/', name: 'app_accueil')]
-    public function index(Request $request, SortieRepository $repository): Response
+    public function index(Request $request, SortieRepository $sortieRepository, CampusRepository $campusRepository): Response
     {
         // Récupérer la date actuelle
         $currentDate = new \DateTime();
@@ -20,13 +23,38 @@ class SortieController extends AbstractController
         $user = $this->getUser();
 
         // Récupérer les sorties
-        $sorties = $repository->findSearch();
+        $sorties = $sortieRepository->findSearch();
 
-        // Rendre la vue en passant la date et l'utilisateur
+        // Récupérer les campus depuis la base de données
+        $campusEntities = $campusRepository->findAll();
+
+        // Créer un tableau associatif des campus (id => nom) pour les choix du formulaire
+        $campusChoices = [];
+        foreach ($campusEntities as $campus) {
+            $campusChoices[$campus->getNom()] = $campus->getNom();
+        }
+
+        // Récupérer le form pour le filtre
+        $data = new SearchData();
+        $form = $this->createForm(SearchForm::class, $data, [
+            'campus_choices' => $campusChoices,
+        ]);
+
+        // Gérer la soumission du formulaire
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Effectuer le traitement du formulaire ici
+            // ...
+
+            // Rediriger ou rendre une autre vue si nécessaire
+        }
+
+        // Rendre la vue en passant la date, l'utilisateur et le formulaire
         return $this->render('pages/accueil.html.twig', [
             'currentDate' => $currentDate,
             'user' => $user,
             'sorties' => $sorties,
+            'form' => $form->createView()
         ]);
     }
 }

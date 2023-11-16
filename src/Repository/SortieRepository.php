@@ -25,7 +25,7 @@ class SortieRepository extends ServiceEntityRepository
      * Récupère les sorties en lien avec une recherche
      * @return Sortie[]
      */
-    public function findSearch()
+    public function findSearch(): array
     {
         return $this->findAll();
     }

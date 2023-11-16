@@ -238,8 +238,9 @@ nav {
     list-style: none;
 }
 
-
-
-
+/*** Form date ***/
+.inline-date-picker {
+    display: inline-block;
+}
 
 
