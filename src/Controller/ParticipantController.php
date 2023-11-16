@@ -41,7 +41,15 @@ class ParticipantController extends AbstractController
         $participantForm = $this->createForm(ProfilType::class, $participant);
 
         //todo traiter le formulaire
+        $participantForm->handleRequest($request);
 
+        if ($participantForm->isSubmitted() && $participantForm->isValid()) {
+            $formData = $participantForm->getData();
+
+            if ($formData->getPassword() !== $formData->getConfirmationPassword()) {
+                $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+            }
+        }
         return $this->render('pages/profil.html.twig', [
             'participantForm' => $participantForm->createView()
         ]);
