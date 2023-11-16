@@ -1,52 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="f-col a-cent j-even">
-    {{ form_start(participantForm, {'attr': {'class': 'f-col a-cent j-even mb-32'}}) }}
+<main>
+    <div class="f-col a-cent j-even">
+        {{ form_start(participantForm, {'attr': {'class': 'f-col a-cent j-even mb-32'}}) }}
 
-    {{ form_row(participantForm.pseudo, {
-        'attr': {
-            'class': 'mb-32 ml-32'
-        },
-    }) }}
-    {{ form_row(participantForm.prenom, {
-        'attr': {
-            'class': 'mb-32 ml-32'
-        },
-    }) }}
-    {{ form_row(participantForm.nom, {
-        'attr': {
-            'class': 'mb-32 ml-32'
-        }
-    }) }}
-    {{ form_row(participantForm.telephone, {
-        'attr': {
-            'class': 'mb-32 ml-32'
-        }
-    }) }}
-    {{ form_row(participantForm.mail, {
-        'attr': {
-            'class': 'mb-32 ml-32'
-        },
-    }) }}
-    {{ form_row(participantForm.motPasse, {
-        'attr': {
-            'class': 'mb-32 ml-32'
-        }
-    }) }}
+        {{ form_widget(participantForm) }}
 
-    {{ form_row(participantForm.campus, {
-        'attr': {
-            'class': 'mb-32 ml-32'
-        }
-    }) }}
-</div>
-    <div class="f j-cent">
-        <button class="btn-scdr" type="submit">Enregistrer</button>
-        <button class="btn-danger ml-32" type="reset">Annuler</button>
+        <div class="f j-cent">
+            <button class="btn-scdr" type="submit">Enregistrer</button>
+            <button class="btn-danger ml-32" type="reset">Annuler</button>
+        </div>
+
+        {{ form_end(participantForm) }}
     </div>
-
-    {{ form_end(participantForm) }}
+</main>
 {% endblock %}
 
 {% block title %}
