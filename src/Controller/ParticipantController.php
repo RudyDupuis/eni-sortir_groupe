@@ -9,12 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class ParticipantController extends AbstractController
 {
+
+
     #[Route(path: '/connexion', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -37,7 +39,7 @@ class ParticipantController extends AbstractController
     }
 
     #[Route(path: '/profil', name: 'app_profil')]
-    public function profil(Request $request, Security $security, EntityManagerInterface $entityManager): Response
+    public function profil(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
     {
         $participant = $this->getUser(); // Récupérer l'utilisateur connecté
         $participantForm = $this->createForm(ProfilType::class, $participant);
@@ -46,9 +48,19 @@ class ParticipantController extends AbstractController
         if ($participantForm->isSubmitted() && $participantForm->isValid()) {
             $formData = $participantForm->getData();
 
-//            if ($formData['motPasse'] !== $formData['confirmationMotPasse']) {
-//                $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
-//            }
+            // Vérifier si le mot de passe a été modifié
+            $champPassword = $participantForm->get('motPasse')->getData();
+            if (!empty($champPassword)) {
+                //Vérifier si les mots de passes correspondent
+                if ($champPassword !== $participantForm->get('motPasse')->getData()) {
+                    $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+                    return $this->redirectToRoute('app_profil');
+                }
+
+                // Hachage du mot de passe
+                $hashedPassword = $passwordHasher->hashPassword($participant, $champPassword);
+                $participant->setMotPasse($hashedPassword);
+            }
             $entityManager->persist($participant);
             $entityManager->flush();
 
