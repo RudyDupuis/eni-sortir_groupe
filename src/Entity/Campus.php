@@ -6,6 +6,7 @@ use App\Repository\CampusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CampusRepository::class)]
 class Campus
@@ -15,6 +16,8 @@ class Campus
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'Le nom du campus ne doit pas être vide.')]
+    #[Assert\Choice(choices: ['Nantes', 'Niort', 'En ligne', 'Quimper', 'Rennes'], message: 'Vous devez choisir un Campus qui existe.')]
     #[ORM\Column(length: 30, unique: true)]
     private ?string $nom = null;
 
