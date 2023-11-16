@@ -6,9 +6,11 @@ use App\Repository\EtatRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EtatRepository::class)]
+#[UniqueEntity(fields: "libelle", message: "Ce libelle d'état est déjà utilisé.")]
 class Etat
 {
     #[ORM\Id]
@@ -18,7 +20,7 @@ class Etat
 
     #[Assert\NotBlank(message: 'Le libellé ne doit pas être vide.')]
     #[Assert\Length(max: 50, maxMessage: 'Le libellé ne doit pas dépasser {{ limit }} caractères.')]
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, unique: true)]
     private ?string $libelle = null;
 
     #[ORM\OneToMany(mappedBy: 'etat', targetEntity: Sortie::class)]

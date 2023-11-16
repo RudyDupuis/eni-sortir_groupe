@@ -78,6 +78,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToOne(inversedBy: 'participants')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: "Le campus ne doit pas être vide.")]
     private ?Campus $campus = null;
 
     #[ORM\ManyToMany(targetEntity: Sortie::class, inversedBy: 'participants')]
