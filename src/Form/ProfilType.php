@@ -34,6 +34,7 @@ class ProfilType extends AbstractType
                 'label' => 'Mail'
             ])
             ->add('motPasse', PasswordType::class, [
+                //'required' => false,
                 'label' => 'Mot de passe'
             ])
             ->add('confirmationMotPasse', PasswordType::class, [
