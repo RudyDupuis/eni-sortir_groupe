@@ -9,11 +9,9 @@
     {% block css %}{% endblock %}
 </head>
 <body>
-    <header>
-        <div>
-            <h1><a href="{{ path('app_accueil') }}"><img src="{{ asset('images/logo.png') }}" alt="Sorti"></a></h1>
-            {% include ('inc/nav.html.twig') %}
-        </div>
+    <header class="f j-betw">
+        <a href="{{ path('app_accueil') }}"><img src="{{ asset('images/logo.png') }}" alt="Sorti"></a>
+        <div>{% include ('inc/nav.html.twig') %}</div>
     </header>
 
     {% block body %}{% endblock %}

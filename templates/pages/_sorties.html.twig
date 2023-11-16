@@ -1,0 +1,41 @@
+
+        <td>{{ sortie.nom }}</td>
+        <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut.format('d/m/Y H:i') : 'Non spécifiée' }}</td>
+        <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription.format('d/m/Y') : 'Non spécifiée' }}</td>
+        <td>{{ sortie.participants.count() }} / {{ sortie.nbInscriptionsMax }}</td>
+        <td>{{ sortie.etat.libelle }}</td>
+        <td>{% if is_granted('ROLE_USER') and app.user in sortie.participants %}X{% else %}O{% endif %}</td>
+        <td>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|slice(0, 1) }}.</td>
+        <td>
+            {# Actions conditionnelles en fonction de l'état de la sortie, de l'organisateur et de la participation #}
+            {% if is_granted('ROLE_USER') %}
+                {% set isUserParticipant = false %}
+                {% for participant in sortie.participants %}
+                    {% if participant == app.user %}
+                        {% set isUserParticipant = true %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if not isUserParticipant %}
+                    {# Si l'utilisateur n'est pas inscrit à la sortie #}
+                    <a href="">S'inscrire</a>
+                    <a href="">Afficher</a>
+                {% elseif sortie.organisateur == app.user %}
+                    {# Si l'utilisateur est l'organisateur de la sortie #}
+                    {% if sortie.etat == 'Créée' %}
+                        <a href="">Modifier</a>
+                        <a href="">Publier</a>
+                    {% elseif sortie.etat == 'Ouverte' %}
+                        <a href="">Afficher</a>
+                        <a href="">Annuler</a>
+                    {% endif %}
+                {% elseif isUserParticipant %}
+                    {# Si l'utilisateur est inscrit à la sortie #}
+                    <a href="">Se désister</a>
+                    <a href="">Afficher</a>
+                {% endif %}
+            {% else %}
+                {# Si l'utilisateur n'est pas connecté, afficher le lien "Afficher" #}
+                <a href="">Afficher</a>
+            {% endif %}
+        </td>

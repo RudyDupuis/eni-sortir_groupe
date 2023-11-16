@@ -8,14 +8,35 @@
         <h1>Accueil </h1>
     </div>
 
-    <div class="f a-end j-end">
+    <div style="text-align: right; margin-right: 16px;">
         <p>Date du jour : {{ currentDate|date("m/d/Y") }}</p>
-
         {% if user %}
             <p>Participant : {{ user.getPrenom() }} {{ user.getNom()|slice(0, 1) }}.</p>
         {% endif %}
     </div>
 
-
+    <div>
+            <table>
+                <thead>
+                <tr>
+                    <th>Nom de la sortie</th>
+                    <th>Date de la sortie</th>
+                    <th>Clôture inscription</th>
+                    <th>Inscrits/Places</th>
+                    <th>État</th>
+                    <th>Inscrit</th>
+                    <th>Organisateur</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+            {% for sortie in sorties %}
+                {% include 'pages/_sorties.html.twig' with {sortie: sortie} only %}
+                </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+    </div>
 
 {% endblock %}
