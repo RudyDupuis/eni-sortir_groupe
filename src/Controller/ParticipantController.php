@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Participant;
 use App\Form\ProfilType;
+use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use phpDocumentor\Reflection\Types\This;
@@ -64,6 +65,16 @@ class ParticipantController extends AbstractController
 
         return $this->render('pages/monProfil.html.twig', [
             'participantForm' => $participantForm->createView()
+        ]);
+    }
+
+    #[Route(path: '/participant/{id}', name: 'app_participant')]
+    public function profilParticipant(ParticipantRepository $participantRepository, int $id)
+    {
+        $participant = $participantRepository->find($id);
+
+        return $this->render('pages/...', [
+            'participant' => $participant
         ]);
     }
 }
