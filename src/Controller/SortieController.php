@@ -114,7 +114,7 @@ class SortieController extends AbstractController
         $participant = $this->getUser();
 
         // Vérifier si le participant est déjà inscrit à cette sortie
-        if ($sortie->getParticipants()->contains($participant)) {
+        if ($sortie->getParticipants()->contains($participant) && $sortie->getEtat()->getLibelle() !== 'Activité en cours') {
             // Si le participant est déjà inscrit, le désinscrire
             $sortie->removeParticipant($participant);
             $entityManager->persist($participant);
