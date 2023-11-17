@@ -59,11 +59,11 @@ class Sortie
     #[ORM\JoinColumn(nullable: false)]
     private ?Campus $siteOrganisateur = null;
 
-    #[ORM\ManyToMany(targetEntity: Participant::class, mappedBy: 'estInscrit')]
+    #[ORM\ManyToMany(targetEntity: Participant::class, mappedBy: 'sortiesInscrites')]
     private Collection $participants;
 
     #[Assert\NotNull(message: "L'organisateur ne doit pas être vide.")]
-    #[ORM\ManyToOne(inversedBy: 'estOrganisateur')]
+    #[ORM\ManyToOne(inversedBy: 'sortiesOrganisees')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Participant $organisateur = null;
 
