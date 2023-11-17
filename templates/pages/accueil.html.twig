@@ -12,7 +12,7 @@
     </div>
 
     <div>
-        {% include 'pages/_filtre.html.twig' with {form: form} only %}
+        {% include 'inclusion/_filtre.html.twig' with {form: form} only %}
     </div>
 
     <div>
@@ -32,7 +32,7 @@
             <tbody>
             <tr>
         {% for sortie in sorties %}
-            {% include 'pages/_sorties.html.twig' with {sortie: sortie} only %}
+            {% include 'inclusion/_sorties.html.twig' with {sortie: sortie} only %}
             </tr>
         {% endfor %}
             </tbody>
