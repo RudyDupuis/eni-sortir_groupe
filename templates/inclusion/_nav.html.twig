@@ -1,10 +1,8 @@
 <nav>
     <ul>
         <li><a href="{{ path('app_accueil') }}" title="Accueil">Accueil</a></li>
-{#
         <li><a href="{{ path('app_profil') }}" title="Mon profil">Mon profil</a></li>
-        <li><a href="{{ path('app_deconnection') }}" title="Se déconnecter">Se déconnecter</a></li>
-#}
+        <li><a href="{{ path('app_logout') }}" title="Se déconnecter">Se déconnecter</a></li>
 
 {#
             {% if is_granted("ROLE_ADMIN") %}
