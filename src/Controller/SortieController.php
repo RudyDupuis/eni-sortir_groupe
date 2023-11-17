@@ -51,6 +51,8 @@ class SortieController extends AbstractController
 
         // Gérer la soumission du formulaire
         $form->handleRequest($request);
+        $data = $form->getData();
+        $sorties = $sortieRepository->findSearch($data, $user);
         if ($form->isSubmitted() && $form->isValid()) {
             // Effectuer le traitement du formulaire ici
             // ...
