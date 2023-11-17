@@ -8,9 +8,18 @@
     <link rel="stylesheet" href="{{ asset('style/main.css') }}">
     {% block css %}{% endblock %}
 </head>
-<body>    
+<body>
+    <header class="f j-betw">
+        <a href="{{ path('app_accueil') }}"><img src="{{ asset('images/logo.png') }}" alt="Sorti"></a>
+        <div>{% include ('inc/nav.html.twig') %}</div>
+    </header>
+
     {% block body %}{% endblock %}
     {% block js %}{% endblock %}
+
+    <footer>
+        <div>&copy; Sortir {{ "now"|date("Y") }} </div>
+    </footer>
 </body>
 </html>
 
