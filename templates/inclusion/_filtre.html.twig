@@ -1,0 +1,49 @@
+{{ form_start(form) }}
+
+<h2>Filtrer les sorties</h2>
+<div class="f j-around">
+    <div>
+        {{ form_row(form.campus) }}
+        {{ form_row(form.q) }}
+        <div>
+            <div class="inline-date-picker">
+                {{ form_row(form.dateDebut) }}
+            </div>
+            <div class="inline-date-picker">
+                {{ form_row(form.dateFin) }}
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div>
+            <label for="{{ form.utilite1.vars.id }}">
+                {{ form_widget(form.utilite1) }} Sorties dont je suis l'organisateur/trice
+            </label>
+        </div>
+
+        <div>
+            <label for="{{ form.utilite2.vars.id }}">
+                {{ form_widget(form.utilite2) }} Sorties auxquelles je suis inscrit/e
+            </label>
+        </div>
+
+        <div>
+            <label for="{{ form.utilite3.vars.id }}">
+                {{ form_widget(form.utilite3) }} Sorties auxquelles je ne suis pas inscrit/e
+            </label>
+        </div>
+
+        <div>
+            <label for="{{ form.utilite4.vars.id }}">
+                {{ form_widget(form.utilite4) }} Sorties passées
+            </label>
+        </div>
+    </div>
+
+    <div>
+        <button type="submit">Rechercher</button>
+    </div>
+</div>
+
+{{ form_end(form) }}

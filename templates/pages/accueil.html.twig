@@ -3,7 +3,45 @@
 {% block title %}Accueil {% endblock %}
 
 {% block body %}
-<div class="f a-cent j-cent">
-    <h1>Accueil </h1>
-</div>
+
+    <div>
+        <p>Date du jour : {{ currentDate|date("d/m/Y") }}</p>
+        {% if user %}
+            <p>Participant : {{ user.getPrenom() }} {{ user.getNom()|slice(0, 1) }}.</p>
+        {% endif %}
+    </div>
+
+    <div>
+        {% include 'inclusion/_filtre.html.twig' with {form: form} only %}
+    </div>
+
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>Nom de la sortie</th>
+                <th>Date de la sortie</th>
+                <th>Clôture inscription</th>
+                <th>Inscrits/Places</th>
+                <th>État</th>
+                <th>Inscrit</th>
+                <th>Organisateur</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+        {% for sortie in sorties %}
+            <tr>
+            {% include 'inclusion/_sorties.html.twig' with {sortie: sortie} only %}
+            </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <a href="{{ path('sortie_creer') }}"><button>Créer une sortie</button></a>
+    </div>
+
+
 {% endblock %}
