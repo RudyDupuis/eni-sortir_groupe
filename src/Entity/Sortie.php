@@ -22,24 +22,24 @@ class Sortie
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
-    #[Assert\NotNull(message: "La date et l'heure de début ne doivent pas être vides.")]
+    #[Assert\NotBlank(message: "La date et l'heure de début ne doivent pas être vides.")]
     #[Assert\DateTime(message: "La date et l'heure de début doivent être au format datetime.")]
     #[Assert\GreaterThanOrEqual("today", message: "La date et l'heure de début doivent être postérieures à la date actuelle.")]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateHeureDebut = null;
 
-    #[Assert\NotNull(message: "La durée ne doit pas être vide.")]
+    #[Assert\NotBlank(message: "La durée ne doit pas être vide.")]
     #[Assert\Range(min: 1, max: 350, notInRangeMessage: "La durée doit être comprise entre {{ min }} et {{ max }} minutes.")]
     #[ORM\Column]
     private ?int $duree = null;
 
-    #[Assert\NotNull(message: "La date limite d'inscription ne doit pas être vide.")]
+    #[Assert\NotBlank(message: "La date limite d'inscription ne doit pas être vide.")]
     #[Assert\Date(message: "La date limite d'inscription doit être au format date.")]
     #[Assert\LessThan(propertyPath: "dateHeureDebut", message: "La date limite d'inscription doit être antérieure à la date et l'heure de début de la sortie.")]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateLimiteInscription = null;
 
-    #[Assert\NotNull(message: "Le nombre maximum d'inscriptions ne doit pas être vide.")]
+    #[Assert\NotBlank(message: "Le nombre maximum d'inscriptions ne doit pas être vide.")]
     #[Assert\Range(min: 1, max: 30, notInRangeMessage: "Le nombre maximum d'inscriptions doit être compris entre {{ min }} et {{ max }}.")]
     #[ORM\Column]
     private ?int $nbInscriptionsMax = null;
@@ -229,4 +229,3 @@ class Sortie
         return $this;
     }
 }
-

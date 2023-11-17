@@ -6,8 +6,11 @@ use App\Repository\CampusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CampusRepository::class)]
+#[UniqueEntity(fields: "nom", message: "Ce nom de campus est déjà utilisé.")]
 class Campus
 {
     #[ORM\Id]
@@ -15,6 +18,8 @@ class Campus
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'Le nom du campus ne doit pas être vide.')]
+    #[Assert\Length(max: 30, maxMessage: "Le nom ne doit pas dépasser {{ limit }} caractères.")]
     #[ORM\Column(length: 30, unique: true)]
     private ?string $nom = null;
 
