@@ -46,14 +46,4 @@ class SearchData
      */
     public $utilite4 = false;
 
-    public function __construct()
-    {
-        // Initialiser la date de début à aujourd'hui
-        $this->dateDebut = new \DateTime();
-
-        // Initialiser la date de fin à une semaine à partir de la date de début
-        $this->dateFin = clone $this->dateDebut;
-        $this->dateFin->modify('+1 week');
-    }
-
 }
