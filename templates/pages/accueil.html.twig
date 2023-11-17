@@ -4,8 +4,8 @@
 
 {% block body %}
 
-    <div style="text-align: right; margin-right: 16px;">
-        <p>Date du jour : {{ currentDate|date("m/d/Y") }}</p>
+    <div>
+        <p>Date du jour : {{ currentDate|date("d/m/Y") }}</p>
         {% if user %}
             <p>Participant : {{ user.getPrenom() }} {{ user.getNom()|slice(0, 1) }}.</p>
         {% endif %}
@@ -30,8 +30,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
         {% for sortie in sorties %}
+            <tr>
             {% include 'inclusion/_sorties.html.twig' with {sortie: sortie} only %}
             </tr>
         {% endfor %}
