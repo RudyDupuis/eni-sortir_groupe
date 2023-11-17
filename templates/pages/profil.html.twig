@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<main>
+    <div class="f-col a-cent j-even">
+        {{ form_start(participantForm) }}
+
+        {{ form_widget(participantForm) }}
+
+        <div class="f j-cent">
+            <button class="btn-scdr" type="submit">Enregistrer</button>
+            <button class="btn-danger ml-32" type="reset">Annuler</button>
+        </div>
+
+        {{ form_end(participantForm) }}
+    </div>
+</main>
+{% endblock %}
+
+{% block title %}
+Gestion du profil | {{ parent() }}
+{% endblock %}
+
