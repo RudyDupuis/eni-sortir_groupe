@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Data\SearchData;
+use App\Entity\Participant;
 use App\Form\SearchForm;
 use App\Repository\CampusRepository;
 use App\Repository\SortieRepository;
@@ -104,6 +105,39 @@ class SortieController extends AbstractController
             'villes' => $villes
         ]);
     }
+
+    #[Route('/sortie/{id}/inscription', name: 'sortie_inscription')]
+    public function inscriptionSortie(int $sortieId, EntityManagerInterface $entityManager, Participant $participant)
+    {
+        // Récupérer la sortie depuis la base de données
+        $sortie = $entityManager->getRepository(Sortie::class)->find($sortieId);
+
+        // Vérifier si le participant est déjà inscrit à cette sortie
+        if ($sortie->getParticipants()->contains($participant)) {
+            // Si le participant est déjà inscrit, le désinscrire
+            $sortie->removeParticipant($participant);
+            $entityManager->persist($participant);
+            $entityManager->flush();
+
+            // Rediriger l'utilisateur ( Afficher un message de confirmation ?)
+            return $this->redirectToRoute('app_accueil');
+        } else {
+
+            // Vérifier si la sortie est ouverte et la date limite d'inscription n'est pas dépassée
+            if ($sortie->getEtat() === 'Ouverte' && $sortie->getEtat() !== 'Clôturée') {
+                // Inscrire le participant à la sortie
+                $sortie->addParticipant($participant); // Ajouter le participant à la sortie
+                $entityManager->persist($participant);
+                $entityManager->flush();
+
+                // Rediriger l'utilisateur vers l'accueil en cas de succès
+                return $this->redirectToRoute('app_accueil');
+            }
+            // Recharger la page en cas d'echec
+            return $this->redirectToRoute('app_accueil');
+        }
+    }
+}
 
     #[Route('/ville/{id}/lieux')]
     public function recupererLieuxDuneVille(LieuRepository $lieuRepository, VilleRepository $villeRepository, int $id)
