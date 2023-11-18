@@ -4,7 +4,6 @@ namespace App\Controller;
 
 
 use App\Data\SearchData;
-use App\Entity\Participant;
 use App\Form\SearchForm;
 use App\Repository\CampusRepository;
 use App\Repository\SortieRepository;
@@ -25,19 +24,11 @@ class SortieController extends AbstractController
     #[Route('/', name: 'app_accueil')]
     public function index(Request $request, SortieRepository $sortieRepository, CampusRepository $campusRepository): Response
     {
-        // Récupérer la date actuelle
         $currentDate = new \DateTime();
-
-        // Récupérer l'utilisateur connecté
         $user = $this->getUser();
-
-        // Récupérer les sorties
-        $sorties = $sortieRepository->findSearch();
 
         // Récupérer les campus depuis la base de données
         $campusEntities = $campusRepository->findAll();
-
-        // Créer un tableau associatif des campus (id => nom) pour les choix du formulaire
         $campusChoices = [];
         foreach ($campusEntities as $campus) {
             $campusChoices[$campus->getNom()] = $campus->getNom();
@@ -48,19 +39,11 @@ class SortieController extends AbstractController
         $form = $this->createForm(SearchForm::class, $data, [
             'campus_choices' => $campusChoices,
         ]);
-
-        // Gérer la soumission du formulaire
         $form->handleRequest($request);
+
         $data = $form->getData();
         $sorties = $sortieRepository->findSearch($data, $user);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Effectuer le traitement du formulaire ici
-            // ...
 
-            // Rediriger ou rendre une autre vue si nécessaire
-        }
-
-        // Rendre la vue en passant la date, l'utilisateur et le formulaire
         return $this->render('pages/accueil.html.twig', [
             'currentDate' => $currentDate,
             'user' => $user,

@@ -192,6 +192,10 @@ button:hover {
     margin-left: 32px;
 }
 
+.ml-16 {
+    margin-left: 16px;
+}
+
 .mt-32 {
     margin-top: 32px;
 }
@@ -206,41 +210,77 @@ button:hover {
 
 /****** Componants *****/
 
+/*** Body ***/
+body {
+    background: url(../../images/bg700px.png) left bottom / auto no-repeat;
+}
+
 /*** Main ***/
 main {
     min-height: calc(100vh - 160px);
     padding: 32px 10%;
 }
 
-/*** Footer ***/
+/*** Footer Header ***/
+header {
+    height: 100px;
+    padding: 0 32px;
+}
+
+@media (max-width: 550px) {
+    header {
+        flex-direction: column;
+        padding: 48px 0;
+        height: auto;
+    }
+    nav {
+        margin-top: 32px;
+    }
+}
+
 footer {
     height: 60px;
-    background-color: #f0f0f0;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #032E54;
 }
 
-/*** Header ***/
-header {
-    padding: 10px 20px;
-    align-items: center;
-    text-align: center;
+footer p {
+    color: #fff;
 }
 
-header img {
-    height: 70px;
-}
-
-/*** Nav ***/
-nav {
-    list-style: none;
-}
-
-/*** Form date ***/
-.inline-date-picker {
+/*** Form ***/
+form label {
     display: inline-block;
+    width: 200px;
+    align-self: flex-start;
+}
+
+form:first-child div {
+    margin-bottom: 32px;
+}
+
+@media (max-width: 700px) {
+    form label {
+        width: auto;
+        margin-bottom: 16px;
+    }
+
+    form:first-child div:not(.notcss) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    form:first-child input, form:first-child select {
+        margin-left: 0;
+    } 
 }
 
 
+
+/*** Règles responsives ***/
+@media (max-width: 700px) {
+    .boutons_reponsive button {
+        margin-left: 0;
+        margin-bottom: 32px;
+    }
+}

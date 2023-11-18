@@ -37,9 +37,8 @@ security:
         always_remember_me: false
 
   access_control:
-    # - { path: ^/admin, administrateur est true } Si admin on peut acceder à ces pages
-    # - { path: ^/, actif est true } Si pas actif on peut acceder à aucune page
-    # - { path: ^/connexion, n'est pas roles: ROLE_USER } Si pas connecté on est redirigé sur la page de connexion
+    - { path: ^/connexion, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
   security:

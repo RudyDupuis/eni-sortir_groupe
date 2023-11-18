@@ -1,49 +1,36 @@
-{{ form_start(form) }}
+{{ form_start(form, {'attr': {'class': 'mb-64'}}) }}
 
-<h2>Filtrer les sorties</h2>
-<div class="f j-around">
-    <div>
-        {{ form_row(form.campus) }}
-        {{ form_row(form.q) }}
-        <div>
-            <div class="inline-date-picker">
-                {{ form_row(form.dateDebut) }}
-            </div>
-            <div class="inline-date-picker">
-                {{ form_row(form.dateFin) }}
-            </div>
+<h2 class="mb-32">Filtrer les sorties</h2>
+
+<section class="f j-betw filter-section">
+    <div class="mb-16 filter-top">
+        {{ form_row(form.campus, {'row_attr': {'class': 'mb-16'}}) }}
+        {{ form_row(form.q, {'row_attr': {'class': 'mb-16'}}) }}
+        <div class="f filter-date">
+            {{ form_row(form.dateDebut) }}
+            {{ form_row(form.dateFin, {'row_attr': {'class': 'ml-16 filter_enddate'}, 'attr': {'class': 'ml-16'}}) }}
         </div>
     </div>
 
-    <div>
-        <div>
-            <label for="{{ form.utilite1.vars.id }}">
-                {{ form_widget(form.utilite1) }} Sorties dont je suis l'organisateur/trice
-            </label>
-        </div>
+    <div class="f-col a-cent filter-checkbox">
+        <label for="{{ form.utilite1.vars.id }}">
+            {{ form_widget(form.utilite1) }} Sorties dont je suis l'organisateur/trice
+        </label>
 
-        <div>
-            <label for="{{ form.utilite2.vars.id }}">
-                {{ form_widget(form.utilite2) }} Sorties auxquelles je suis inscrit/e
-            </label>
-        </div>
+        <label for="{{ form.utilite2.vars.id }}">
+            {{ form_widget(form.utilite2) }} Sorties auxquelles je suis inscrit/e
+        </label>
 
-        <div>
-            <label for="{{ form.utilite3.vars.id }}">
-                {{ form_widget(form.utilite3) }} Sorties auxquelles je ne suis pas inscrit/e
-            </label>
-        </div>
+        <label for="{{ form.utilite3.vars.id }}">
+            {{ form_widget(form.utilite3) }} Sorties auxquelles je ne suis pas inscrit/e
+        </label>
 
-        <div>
-            <label for="{{ form.utilite4.vars.id }}">
-                {{ form_widget(form.utilite4) }} Sorties passées
-            </label>
-        </div>
-    </div>
+        <label for="{{ form.utilite4.vars.id }}" class="mb-32">
+            {{ form_widget(form.utilite4) }} Sorties passées
+        </label>
 
-    <div>
         <button type="submit">Rechercher</button>
     </div>
-</div>
+</section>
 
 {{ form_end(form) }}
