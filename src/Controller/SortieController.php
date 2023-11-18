@@ -98,14 +98,14 @@ class SortieController extends AbstractController
         $sortie = $sortieRepository->find($id);
         $participant = $this->getUser();
 
-        // Vérifier si le participant est déjà inscrit à cette sortie
+        // Vérifier si le participant est déjà inscrit à cette sortie ou si la sortie est commencée
         if ($sortie->getParticipants()->contains($participant) && $sortie->getEtat()->getLibelle() !== 'Activité en cours') {
             // Si le participant est déjà inscrit, le désinscrire
             $sortie->removeParticipant($participant);
             $entityManager->persist($participant);
             $entityManager->flush();
 
-            // Vérifier si la sortie est ouverte et la date limite d'inscription n'est pas dépassée
+            // Vérifier si la sortie est strictement 'ouverte' et le nombre d'inscrit n'est pas dépassée
         } else if ($sortie->getEtat()->getLibelle() === 'Ouverte' && $sortie->getParticipants()->count() < $sortie->getNbInscriptionsMax()) {
 
             // Inscrire le participant à la sortie
