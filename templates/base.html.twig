@@ -9,17 +9,18 @@
     {% block css %}{% endblock %}
 </head>
 <body>
-    <header class="f j-betw">
+    <header class="f a-cent j-betw">
         <a href="{{ path('app_accueil') }}"><img src="{{ asset('images/logo.png') }}" alt="Sorti"></a>
-        <div>{% include ('inclusion/_nav.html.twig') %}</div>
+        {% include ('inclusion/_nav.html.twig') %}
     </header>
 
     {% block body %}{% endblock %}
-    {% block js %}{% endblock %}
 
-    <footer>
-        <div>&copy; Sortir {{ "now"|date("Y") }} </div>
+    <footer class="f a-cent j-cent">
+        <p>&copy; ENI Sortir {{ "now"|date("Y") }} </p>
     </footer>
+
+    {% block js %}{% endblock %}
 </body>
 </html>
 

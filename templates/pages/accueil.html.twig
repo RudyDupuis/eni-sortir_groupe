@@ -1,47 +1,42 @@
 {% extends 'base.html.twig' %}
+{% block css %}<link rel="stylesheet" href="{{ asset('style/pages/accueil.css') }}">{% endblock %}
 
 {% block title %}Accueil {% endblock %}
 
 {% block body %}
-
-    <div>
+<main>
+    <div class="f-col a-end infos">
         <p>Date du jour : {{ currentDate|date("d/m/Y") }}</p>
-        {% if user %}
-            <p>Participant : {{ user.getPrenom() }} {{ user.getNom()|slice(0, 1) }}.</p>
-        {% endif %}
+        <p>Participant : {{ user.getPrenom() }} {{ user.getNom()|slice(0, 1) }}.</p>
     </div>
 
-    <div>
-        {% include 'inclusion/_filtre.html.twig' with {form: form} only %}
-    </div>
+    {% include 'inclusion/_filtre.html.twig' with {form: form} only %}
 
-    <div>
-        <table>
-            <thead>
-            <tr>
-                <th>Nom de la sortie</th>
-                <th>Date de la sortie</th>
-                <th>Clôture inscription</th>
-                <th>Inscrits/Places</th>
-                <th>État</th>
-                <th>Inscrit</th>
-                <th>Organisateur</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-        {% for sortie in sorties %}
-            <tr>
-            {% include 'inclusion/_sorties.html.twig' with {sortie: sortie} only %}
-            </tr>
-        {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>Nom de la sortie</th>
+            <th>Date de la sortie</th>
+            <th>Clôture inscription</th>
+            <th>Inscrits/Places</th>
+            <th>État</th>
+            <th>Inscrit</th>
+            <th>Organisateur</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+    {% for sortie in sorties %}
+        <tr>
+        {% include 'inclusion/_sorties.html.twig' with {sortie: sortie} only %}
+        </tr>
+    {% endfor %}
+        </tbody>
+    </table>
 
-    <div>
-        <a href="{{ path('sortie_creer') }}"><button>Créer une sortie</button></a>
-    </div>
+    <a href="{{ path('sortie_creer') }}"><button>Créer une sortie</button></a>
+</main>
+
 
 
 {% endblock %}

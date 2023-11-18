@@ -22,8 +22,6 @@ class Sortie
     #[ORM\Column(length: 50)]
     private ?string $nom = null;
 
-    #[Assert\NotBlank(message: "La date et l'heure de début ne doivent pas être vides.")]
-    #[Assert\DateTime(message: "La date et l'heure de début doivent être au format datetime.")]
     #[Assert\GreaterThanOrEqual("today", message: "La date et l'heure de début doivent être postérieures à la date actuelle.")]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateHeureDebut = null;
@@ -33,8 +31,6 @@ class Sortie
     #[ORM\Column]
     private ?int $duree = null;
 
-    #[Assert\NotBlank(message: "La date limite d'inscription ne doit pas être vide.")]
-    #[Assert\Date(message: "La date limite d'inscription doit être au format date.")]
     #[Assert\LessThan(propertyPath: "dateHeureDebut", message: "La date limite d'inscription doit être antérieure à la date et l'heure de début de la sortie.")]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateLimiteInscription = null;

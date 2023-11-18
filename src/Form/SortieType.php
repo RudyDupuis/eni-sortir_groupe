@@ -21,27 +21,22 @@ class SortieType extends AbstractType
             ])
             ->add('dateHeureDebut', DateTimeType::class, [
                 'label' => 'Date et heure de la sortie : ',
-                'widget' => 'single_text',
+                'widget' => 'single_text'
             ])
             ->add('dateLimiteInscription', DateTimeType::class, [
                 'label' => "Date limite d'inscription : ",
-                'widget' => 'single_text',
+                'widget' => 'single_text'
             ])
             ->add('nbInscriptionsMax', IntegerType::class, [
                 'label' => "Nombre de places : "
             ])
             ->add('duree', IntegerType::class, [
-                'label' => "Durée (minutes) : ",
+                'label' => "Durée (minutes) : "
             ])
             ->add('infosSortie', TextareaType::class, [
-                'label' => "Description et infos : "
-            ])
-            //->add('lieu')
-            //->add('siteOrganisateur')
-            //->add('participants')
-            //->add('organisateur')
-            //->add('etat')
-        ;
+                'label' => "Description et infos : ",
+                'row_attr' => ['class' => 'f'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
