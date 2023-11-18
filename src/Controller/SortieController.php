@@ -91,6 +91,15 @@ class SortieController extends AbstractController
         ]);
     }
 
+    #[Route(path: '/sortie/informations/{id}', name: 'sortie_informationSortie')]
+    public function informationSortie(SortieRepository $sortieRepository, int $id): Response
+    {
+        $sortie = $sortieRepository->find($id);
+
+        return $this->render('pages/informationsSortie.html.twig', [
+            'sortie' => $sortie
+        ]);
+
     #[Route('/sortie/{id}/inscription', name: 'sortie_inscription')]
     public function inscriptionSortie(int $id, EntityManagerInterface $entityManager,  SortieRepository $sortieRepository)
     {

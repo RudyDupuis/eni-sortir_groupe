@@ -67,11 +67,11 @@ class ParticipantController extends AbstractController
     }
 
     #[Route(path: '/participant/{id}', name: 'app_participant')]
-    public function profilParticipant(ParticipantRepository $participantRepository, int $id)
+    public function profilParticipant(ParticipantRepository $participantRepository, int $id): Response
     {
         $participant = $participantRepository->find($id);
 
-        return $this->render('pages/...', [
+        return $this->render('pages/informationsParticipant.html.twig', [
             'participant' => $participant
         ]);
     }

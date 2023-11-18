@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}}{% endblock %}
+
+{% block body %}
+    <h1 style="text-align: center">Afficher une sortie</h1>
+    <main>
+        <section style="text-align: center; display: flex; justify-content: center;">
+            <div style="margin-right: 30px; text-align: left;">
+                <p style="margin-bottom: 20px">Nom de la sortie : {{ sortie.nom }}</p>
+                <p style="margin-bottom: 20px">Date et heure de la sortie : {{ sortie.dateHeureDebut.format('Y-m-d H:i:s') }}</p>
+                <p style="margin-bottom: 20px">Date limite d'inscription : {{ sortie.dateLimiteInscription.format('Y-m-d') }}</p>
+                <p style="margin-bottom: 20px">Nombre de places : </p>
+                <p style="margin-bottom: 20px">Durée: {{ sortie.duree }} </p>
+                <p style="margin-bottom: 20px; max-width: 500px">Description et infos : {{ sortie.infosSortie }} </p>
+            </div>
+            <div style="text-align: left;">
+                <p style="margin-bottom: 20px">Campus : {{ sortie.siteOrganisateur.nom }}</p>
+                <p style="margin-bottom: 20px">Lieu : {{ sortie.lieu.nom }}</p>
+                <p style="margin-bottom: 20px">Rue : </p>
+                <p style="margin-bottom: 20px">Code postal : </p>
+                <p style="margin-bottom: 20px">Latitude : </p>
+                <p style="margin-bottom: 20px">Longitude : </p>
+            </div>
+        </section>
+        <section>
+            <h2>Liste des participants inscrits :</h2>
+            <div style="max-height: 75px; overflow-y: auto;">
+                <table style="border-collapse: collapse;">
+                    <thead>
+                    <tr>
+                        <th style="position: sticky; top: 0; background-color: #f2f2f2;">Pseudo</th>
+                        <th style="position: sticky; top: 0; background-color: #f2f2f2;">Nom</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for participant in sortie.participants %}
+                        <tr>
+                            <td>{{ participant.pseudo }}</td>
+                            <td>{{ participant.nom }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+{% endblock %}
