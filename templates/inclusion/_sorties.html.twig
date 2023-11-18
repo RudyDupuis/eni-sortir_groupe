@@ -5,7 +5,7 @@
         <td>{{ sortie.participants.count() }} / {{ sortie.nbInscriptionsMax }}</td>
         <td>{{ sortie.etat.libelle }}</td>
         <td>{% if app.user in sortie.participants %}X{% else %}O{% endif %}</td>
-        <td>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|slice(0, 1) }}.</td>
+        <td><a href="{{ path('app_participant', {'id': sortie.organisateur.id }) }}">{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom|slice(0, 1) }}.</a></td>
         <td>
                 {% set isUserParticipant = false %}
 
@@ -21,13 +21,13 @@
                         <a href="">Modifier</a> -
                         <a href="">Publier</a>
                     {% elseif sortie.etat.libelle == "Ouverte" or sortie.etat.libelle == "Clôturée" %}
-                        <a href="">Afficher</a> -
+                        <a href="{{ path('sortie_informationSortie', {'id': sortie.id}) }}">Afficher</a> -
                         <a href="">Annuler</a>
                     {% else %}
-                        <a href="">Afficher</a>
+                        <a href="{{ path('sortie_informationSortie', {'id': sortie.id}) }}">Afficher</a>
                     {% endif %}
                 {% else %}
-                    <a href="">Afficher</a>
+                    <a href="{{ path('sortie_informationSortie', {'id': sortie.id}) }}">Afficher</a>
                     {% if sortie.etat.libelle == "Ouverte" %}
                         {% if isUserParticipant %}
                             - <a href="{{ path('sortie_inscription', {'id': sortie.id}) }}">Se désister</a>

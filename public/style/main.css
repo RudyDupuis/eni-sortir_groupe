@@ -284,3 +284,16 @@ form:first-child div {
         margin-bottom: 32px;
     }
 }
+
+/*** Texte en gras avec espacement après : ***/
+.span-200-strong {
+    display: inline-block;
+    width: 200px;
+    font-weight: 600;
+}
+
+@media (max-width: 800px) {
+    .span-200-strong {
+        width:max-content;
+    }
+}

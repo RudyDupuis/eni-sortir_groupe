@@ -1,0 +1,55 @@
+p {
+    max-width: 500px;
+}
+
+h2 {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+table {
+    background-color: #fff;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background: #d8d8d8;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table th,
+table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+@media (max-width: 1050px) {
+    .sortie-infos {
+        flex-direction: column;
+    }
+
+    span {
+        width: max-content;
+    }
+
+    .sortie-infos div:first-child {
+        margin-bottom: 16px;
+    }
+
+    .sortie-infos div:last-child {
+        margin-left:0;
+        align-self: baseline;
+    }
+
+    .participant-list {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
