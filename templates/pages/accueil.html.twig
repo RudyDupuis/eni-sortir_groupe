@@ -34,9 +34,8 @@
         </tbody>
     </table>
 
-    <a href="{{ path('sortie_creer') }}"><button>Créer une sortie</button></a>
+    <a href="{{ path('sortie_creer') }}" id="lienPageCreationSortie"><button>Créer une sortie</button></a>
 </main>
-
-
-
 {% endblock %}
+
+{% block js %}<script src="{{ asset('js/accueil.js') }}"></script>{% endblock %}
