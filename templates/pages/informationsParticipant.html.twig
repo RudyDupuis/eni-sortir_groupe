@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{parent()}}{% endblock %}
+
+{% block body %}
+    <main style="text-align: center">
+        <h1>{{ participant.pseudo }}</h1>
+        <div>Prénom : {{ participant.prenom }}</div>
+        <div>Nom : {{ participant.nom }}</div>
+        <div>Téléphone : {{ participant.telephone }}</div>
+        <div>Email : {{ participant.mail }}</div>
+        <div>Campus : {{ participant.campus.nom }} </div>
+        <button onclick="window.history.back()">Retour</button> {# plus simple que de redirect Path ??? cette action fait un simple retour sur la page précédente alors qu'avec un redirect Path on risque de devoir refaire une recherche de particpants avec nos filtres #}
+    </main>
+{% endblock %}
+
+{# Je ne sais pas comment prendre son image car nous n'allons pas la stocker en BDD #}
