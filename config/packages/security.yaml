@@ -38,6 +38,9 @@ security:
 
   access_control:
     - { path: ^/connexion, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/mot-de-passe-oublie, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/verification-email, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/reinitialiser/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/, roles: ROLE_USER }
 
 when@test:

@@ -303,3 +303,9 @@ form:first-child div {
     width: 200px;
     height: 200px;
 }
+
+/*** Mot de passe oublié ***/
+.mdp_oublie{
+    text-decoration: underline;
+    text-transform: none;
+}

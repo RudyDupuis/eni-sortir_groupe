@@ -17,3 +17,12 @@ php bin/console doctrine:schema:drop --force
 Pour une mise du site sur serveur, il faudrait activer cette commande toutes les heures
 
 php bin/console app:update-etats
+
+### Activer la réinitialisation de mot de passe
+
+Ajouter le mailer dans le .env.local
+Changer les valeurs de identifiant, motdepasse, serveur et de port
+
+`MAILER_DSN=smtp://identifaint:motdepasse@serveur:port` (voir les valeurs dans le notion)
+
+php bin/console console messenger:consume async

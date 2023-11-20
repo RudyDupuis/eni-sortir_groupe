@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mot de passe oublié {{ parent() }}{% endblock %}
+
+{% block body %}
+    <main class="f-col a-cent j-cent">
+        <h1 class="tac mb-64">Réinitialisez votre mot de passe</h1>
+
+        {{ form_start(resetForm, {'attr': {'class': 'f-col a-cent'}}) }}
+            {{ form_row(resetForm.plainPassword) }}
+        
+            <button type="submit" class="mt-32">Réinitialiser le mot de passe</button>
+        {{ form_end(resetForm) }}
+    </main>
+{% endblock %}

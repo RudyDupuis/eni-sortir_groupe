@@ -23,10 +23,14 @@
             value="{{ csrf_token('authenticate') }}"
         >
 
-        <div class="mb-32 ml-32 notcss">
-            <input type="checkbox" id="remember_me" name="_remember_me" />
-            <label for="remember_me" class="ml-16">Se souvenir de moi</label>
+        <div class="mb-32 ml-32 notcss f-col">
+            <div>
+                <input type="checkbox" id="remember_me" name="_remember_me" />
+                <label for="remember_me" class="ml-16">Se souvenir de moi</label>
+            </div>
+            <a href="{{ path('app_forgot_password_request') }}" class="mdp_oublie">Mot de passe oublié</a>
         </div>
+
 
         <button  type="submit">Connexion</button>
     </form>
