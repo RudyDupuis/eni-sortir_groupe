@@ -1,16 +1,12 @@
 <nav>
     <ul class="f a-cent j-cent">
+        {% if app.user and app.user.isAdministrateur() %}
+            <li><a href="" title="Villes">Villes</a></li>
+            <li class="ml-16"><a href="" title="Campus">Campus</a></li>
+        {% endif %}
+
         <li class="ml-16"><a href="{{ path('app_accueil') }}" title="Accueil">Accueil</a></li>
         <li class="ml-16"><a href="{{ path('app_profil') }}" title="Mon profil">Mon profil</a></li>
         <li class="ml-16"><a href="{{ path('app_logout') }}" title="Se déconnecter">Se déconnecter</a></li>
-
-{#
-            {% if is_granted("ROLE_ADMIN") %}
-
-                <li><a href="{{ path('admin_dashboard') }}" title="Villes">Villes</a></li>
-                <li><a href="{{ path('admin_dashboard') }}" title="Campus">Campus</a></li>
-
-            {% endif %}
-#}
     </ul>
 </nav>
