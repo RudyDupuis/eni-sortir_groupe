@@ -52,7 +52,7 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
                 $sortie->setInfosSortie($faker->paragraph);
             }
 
-            $sortie->setEtat($faker->randomElement($etatReferences));
+            $sortie->setEtat($etatReferences[1]);
             $sortie->setLieu($faker->randomElement($lieuReferences));
             $sortie->setSiteOrganisateur($faker->randomElement($campusReferences));
             $sortie->setOrganisateur($faker->randomElement($particiantReferences));
