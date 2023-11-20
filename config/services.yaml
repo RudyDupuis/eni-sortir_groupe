@@ -21,7 +21,7 @@ services:
       - "../src/Kernel.php"
 
   # Your listener service configuration
-  App\EventListener\CheckActiveUserListener:
+  App\EventListener\CheckUserListener:
     tags:
       - {
           name: kernel.event_listener,

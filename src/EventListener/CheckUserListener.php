@@ -6,7 +6,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class CheckActiveUserListener
+class CheckUserListener
 {
     private $tokenStorage;
 
