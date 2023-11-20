@@ -297,3 +297,9 @@ form:first-child div {
         width:max-content;
     }
 }
+
+/*** Photo de profil ***/
+.profile_img {
+    width: 200px;
+    height: 200px;
+}
