@@ -25,4 +25,6 @@ Changer les valeurs de identifiant, motdepasse, serveur et de port
 
 `MAILER_DSN=smtp://identifaint:motdepasse@serveur:port` (voir les valeurs dans le notion)
 
+Lancer l'envoie de mail en async
+
 php bin/console console messenger:consume async
