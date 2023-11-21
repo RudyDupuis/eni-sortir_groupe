@@ -175,6 +175,10 @@ button:hover {
     justify-content: space-evenly;
 }
 
+.f-wrap {
+    flex-wrap: wrap;
+}
+
 /***** margin padding *****/
 .mb-16 {
     margin-bottom: 16px;

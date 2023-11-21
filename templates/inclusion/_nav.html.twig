@@ -1,7 +1,8 @@
 <nav>
-    <ul class="f a-cent j-cent">
+    <ul class="f a-cent j-cent f-wrap">
         {% if app.user and app.user.isAdministrateur() %}
-            <li><a href="" title="Villes">Villes</a></li>
+            <li><a href="{{ path('admin_creer_participant') }}" title="Créer un Participant">Créer Participant</a></li>
+            <li class="ml-16"><a href="" title="Villes">Villes</a></li>
             <li class="ml-16"><a href="" title="Campus">Campus</a></li>
         {% endif %}
 
