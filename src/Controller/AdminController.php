@@ -128,4 +128,40 @@ class AdminController extends AbstractController
             'csvForm' => $csvForm->createView()
         ]);
     }
+
+    #[Route('/gerer-les-participants', name: 'admin_gerer_participants')]
+    public function gererParticipant(ParticipantRepository $participantRepository): Response
+    {
+        $participants = $participantRepository->findAll();
+
+        return $this->render('pages/admin/gererParticipants.html.twig', [
+            'participants' => $participants,
+        ]);
+    }
+
+    #[Route('/participants/{id}/supprimer', name: 'admin_supp_participant')]
+    public function supprimerParticipant(int $id, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager)
+    {
+        $participant = $participantRepository->find($id);
+        $entityManager->remove($participant);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_gerer_participants');
+    }
+
+    #[Route('/participants/{id}/desactiver', name: 'admin_desa_participant')]
+    public function desactiverParticipant(int $id, ParticipantRepository $participantRepository, EntityManagerInterface $entityManager)
+    {
+        $participant = $participantRepository->find($id);
+
+        if ($participant->isActif()) {
+            $participant->setActif(false);
+        } else {
+            $participant->setActif(true);
+        }
+        $entityManager->persist($participant);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('admin_gerer_participants');
+    }
 }
