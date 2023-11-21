@@ -57,6 +57,8 @@ class SortieController extends AbstractController
     {
         $villes = $villeRepository->findAll();
         $sortie = new Sortie();
+        //Réutiliser la function creer pour la page modification ?
+        //$sortie = $id ? $this->getDoctrine()->getRepository(Sortie::class)->find($id) : new Sortie();
 
         /** @var \App\Entity\Participant $auteur */
         $auteur = $this->getUser();
@@ -147,4 +149,19 @@ class SortieController extends AbstractController
 
         return new JsonResponse($lieuxTableau);
     }
+
+    #[Route('/admin/sortie/{id}/supprimer', name: 'admin_sortie_supprimer')]
+    public function supprimerSortie(int $id, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer la sortie depuis la base de données
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
+        // Supprimer la sortie
+        $entityManager->remove($sortie);
+        $entityManager->flush();
+
+        // Rechargement de la page après la suppression
+        return $this->render('pages/modifierSortie.html.twig');
+    }
+
 }
