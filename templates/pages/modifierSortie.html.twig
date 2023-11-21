@@ -4,7 +4,7 @@
 
 {% block body %}
     <main>
-        <h1 class="mb-64 tac">Créer une sortie</h1>
+        <h1 class="mb-64 tac">Modifier une sortie</h1>
 
         <div class="f-col a-cent">
             {{ form_start(sortieForm, {'attr': {'class': 'custom-flex-wrapper'}}) }}
@@ -12,12 +12,16 @@
             <div>
                 <div>
                     <label for="campus">Campus</label>
-                    <input type="text" id="Campus" value="{{app.user.campus.nom}}" readonly class="mb-32 ml-32" name="campus"/>
+                    <input type="text" id="Campus" value="{{ app.user.campus.nom }}" readonly class="mb-32 ml-32" name="campus"/>
                 </div>
 
                 <div>
                     <label for="lieu">Lieu</label>
-                    <select id="lieu" class="mb-32 ml-32" name="lieu"></select>
+                    <select id="lieu" class="mb-32 ml-32" name="lieu">
+                        {% for lieu in lieux %}
+                            <option value="{{ lieu.id }}">{{ lieu.nom }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
 
                 <div>
@@ -44,7 +48,6 @@
                     <button type="submit" name="submit" value="enregistrer">Enregistrer</button>
                     <button type="submit" name="submit" value="publier">Publier la sortie</button>
                     <button class="btn-danger ml-32" type="submit" name="submit" value="supprimer">Supprimer la sortie</button>
-{#                    <a href="{{ path('sortie_supprimer', {'id': sortie.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?')">Supprimer la sortie</a>#}
                     <button class="btn-danger " type="reset">Annuler</button>
                 </div>
             </div>
@@ -54,4 +57,10 @@
     </main>
 {% endblock %}
 
-{% block js %}<script src="{{ asset('js/modifierSortie.js') }}"></script>{% endblock %}
+{% block js %}
+    <script src="{{ asset('js/modifierSortie.js') }}"></script>
+    <script>
+        const lieuxData = {{ lieux|json_encode|raw }};
+        // Utilisez lieuxData dans votre JavaScript pour initialiser les lieux et leurs valeurs
+    </script>
+{% endblock %}
