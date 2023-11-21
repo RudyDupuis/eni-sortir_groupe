@@ -1,0 +1,10 @@
+@media (max-width: 1300px) {
+    form {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .no-css{
+        margin-left: 0;
+    }
+}

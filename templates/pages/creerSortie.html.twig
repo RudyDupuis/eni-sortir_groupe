@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% block css %}<link rel="stylesheet" href="{{ asset('style/pages/creerSortie.css') }}">{% endblock %}
 
 {% block title %}Créer une sortie {{parent()}}{% endblock %}
 
@@ -7,9 +8,9 @@
         <h1 class="mb-64 tac">Créer une sortie</h1>
         
         <div class="f-col a-cent">
-            {{ form_start(sortieForm, {'attr': {'class': 'custom-flex-wrapper'}}) }}
+            {{ form_start(sortieForm, {'attr': {'class': 'f'}}) }}
             {{ form_widget(sortieForm) }}
-            <div>
+            <div class="ml-64 no-css">
                 <div>
                     <label for="campus">Campus</label>
                     <input type="text" id="Campus" value="{{app.user.campus.nom}}" readonly class="mb-32 ml-32" name="campus"/>

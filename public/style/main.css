@@ -192,6 +192,10 @@ button:hover {
     margin-bottom: 64px;
 }
 
+.ml-64 {
+    margin-left: 64px;
+}
+
 .ml-32 {
     margin-left: 32px;
 }
@@ -239,6 +243,7 @@ header {
     }
     nav {
         margin-top: 32px;
+        max-width: 80%;
     }
 }
 
@@ -360,5 +365,6 @@ table td {
         font-weight: bold;
         float: left;
         text-transform: uppercase;
+        margin-right: 5px;
     }
 }
