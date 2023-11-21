@@ -16,15 +16,6 @@
                 </div>
 
                 <div>
-                    <label for="ville">Ville</label>
-                    <select id="ville" class="mb-32 ml-32">
-                        {% for ville in villes %}
-                            <option value="{{ ville.id }}">{{ ville.nom }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div>
                     <label for="lieu">Lieu</label>
                     <select id="lieu" class="mb-32 ml-32" name="lieu"></select>
                 </div>
@@ -53,8 +44,8 @@
                     <button type="submit" name="submit" value="enregistrer">Enregistrer</button>
                     <button type="submit" name="submit" value="publier">Publier la sortie</button>
                     <button class="btn-danger ml-32" type="submit" name="submit" value="supprimer">Supprimer la sortie</button>
-                    <a href="{{ path('admin_sortie_supprimer', {'id': sortie.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?')">Supprimer la sortie</a>
-                    <button class="btn-danger ml-32" type="reset">Annuler</button>
+{#                    <a href="{{ path('sortie_supprimer', {'id': sortie.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?')">Supprimer la sortie</a>#}
+                    <button class="btn-danger " type="reset">Annuler</button>
                 </div>
             </div>
 
@@ -63,4 +54,4 @@
     </main>
 {% endblock %}
 
-{% block js %}<script src="{{ asset('js/creerSortie.js') }}"></script>{% endblock %}
+{% block js %}<script src="{{ asset('js/modifierSortie.js') }}"></script>{% endblock %}

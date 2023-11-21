@@ -150,7 +150,37 @@ class SortieController extends AbstractController
         return new JsonResponse($lieuxTableau);
     }
 
-    #[Route('/admin/sortie/{id}/supprimer', name: 'admin_sortie_supprimer')]
+    #[Route('/sortie/modifier/{id}', name: 'sortie_modifier')]
+    public function modifier(Request $request, EntityManagerInterface $entityManager, LieuRepository $lieuRepository, EtatRepository $etatRepository, int $id): Response
+    {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
+        $sortieForm->handleRequest($request);
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+            $idLieu = $request->request->get('lieu', '');
+            $submit = $request->request->get('submit', '');
+
+            if ($idLieu && $submit) {
+                $lieu = $lieuRepository->find($idLieu);
+                $etat = ($submit == "enregistrer") ? $etatRepository->find(1) : $etatRepository->find(2);
+
+                $sortie->setLieu($lieu);
+                $sortie->setEtat($etat);
+            }
+
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_accueil');
+        }
+
+        return $this->render('pages/modifierSortie.html.twig', [
+            'sortieForm' => $sortieForm->createView()
+        ]);
+    }
+
+    #[Route('/sortie/{id}/supprimer', name: 'sortie_supprimer')]
     public function supprimerSortie(int $id, EntityManagerInterface $entityManager): Response
     {
         // Récupérer la sortie depuis la base de données
