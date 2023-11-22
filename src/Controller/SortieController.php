@@ -14,7 +14,6 @@ use App\Repository\LieuRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -128,26 +127,6 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('app_accueil');
     }
 
-    #[Route('/ville/{id}/lieux')]
-    public function recupererLieuxDuneVille(LieuRepository $lieuRepository, VilleRepository $villeRepository, int $id)
-    {
-        $ville = $villeRepository->find($id);
-        $lieux = $lieuRepository->rechercheParVille($ville);
-
-        $lieuxTableau = [];
-        foreach ($lieux as $lieu) {
-            $lieuxTableau[] = [
-                'id' => $lieu->getId(),
-                'nom' => $lieu->getNom(),
-                'rue' => $lieu->getRue(),
-                'codePostal' => $ville->getCodePostal(),
-                'latitude' => $lieu->getLatitude(),
-                'longitude' => $lieu->getLongitude(),
-            ];
-        }
-        return new JsonResponse($lieuxTableau);
-    }
-
     #[Route('/sortie/{id}/supprimer', name: 'sortie_supprimer')]
     public function supprimerSortie(int $id, EntityManagerInterface $entityManager, SortieRepository $sortieRepository): Response
     {
@@ -205,5 +184,23 @@ class SortieController extends AbstractController
             'lieux' => $lieux,
             'sortie' => $sortie,
         ]);
+    }
+
+    #[Route('/sortie/{id}/publier', name: 'sortie_publier')]
+    public function publier(EntityManagerInterface $entityManager, SortieRepository $sortieRepository, EtatRepository $etatRepository, int $id): Response
+    {
+        $sortie = $sortieRepository->find($id);
+
+        if ($this->getUser() !== $sortie->getOrganisateur()) {
+            throw new AccessDeniedException("Accès interdit. Vous n'êtes pas l'organisateur de cette sortie.");
+        }
+
+        if ($sortie->getEtat()->getLibelle() === "Créée") {
+            $sortie->setEtat($etatRepository->rechercheParLibelle("Ouverte"));
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('app_accueil');
     }
 }
