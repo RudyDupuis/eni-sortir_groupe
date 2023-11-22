@@ -54,7 +54,7 @@
             </div>
             {{ form_end(sortieForm) }}
 
-            <a href="{{ path('sortie_supprimer', {'id': sortie.id}) }}" onclick="confirm('Êtes-vous sûr de vouloir supprimer ce participant ?')"><button class="btn-danger ml-32">Supprimer la sortie</button></a>
+            <a href="{{ path('sortie_supprimer', {'id': sortie.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce participant ?')"><button class="btn-danger ml-32">Supprimer la sortie</button></a>
         </div>
     </main>
 {% endblock %}

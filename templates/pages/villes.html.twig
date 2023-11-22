@@ -1,142 +1,84 @@
 {% extends 'base.html.twig' %}
-{% block css %}{% endblock %}
+{% block css %}<link rel="stylesheet" href="{{ asset('style/pages/ville-campus.css') }}">{% endblock %}
 
 {% block title %}Villes {{parent()}}{% endblock %}
 
 {% block body %}
+    <main>
+        <h1>Gérer les Villes</h1>
 
-    <style>
-        .hidden-form {
-            display: none;
-        }
+        <h2 class="mb-32">Filtrer les sites</h2>
 
-        .disabled-btn {
-            opacity: 0.5; /* ou toute autre propriété de style pour indiquer que le bouton est désactivé */
-            pointer-events: none; /* empêche les clics sur le bouton désactivé */
-        }
-    </style>
+        {# Affichez le formulaire de recherche #}
+        <form action="{{ path('app_villes') }}" method="get" class="mb-32">
+            <input type="text" name="searchTerm" placeholder="Rechercher par nom ou code postal" value="{{ searchTerm }}" />
+            <button type="submit">Rechercher</button>
+        </form>
 
-    <h1>Gérer les Villes</h1>
-
-    <h2 class="mb-32">Filtrer les sites</h2>
-
-    {# Affichez le formulaire de recherche #}
-    <form action="{{ path('app_villes') }}" method="get">
-        <input type="text" name="searchTerm" placeholder="Rechercher par nom ou code postal" value="{{ searchTerm }}" />
-        <button type="submit">Rechercher</button>
-    </form>
-
-    {# Affichez le tableau de données #}
-    <table>
-        <thead>
-        <tr>
-            <th>Ville</th>
-            <th>Code Postal</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        {% for ville in villes %}
+        {# Affichez le tableau de données #}
+        <table>
+            <thead>
             <tr>
-                <form method="post" action="{{ path('ville_modifier', {'id': ville.id}) }}" id="form_{{ ville.id }}">
-                    <td>
-                        <span class="editable-content">{{ ville.nom }}</span>
-                        <input type="text" id="new_name_{{ ville.id }}" name="new_name" value="{{ ville.nom }}" class="hidden-form" required>
-                    </td>
-                    <td>
-                        <span class="editable-content">{{ ville.codePostal }}</span>
-                        <input type="text" id="new_postalCode_{{ ville.id }}" name="new_postalCode" value="{{ ville.codePostal }}" class="hidden-form" required>
-                    </td>
-                    <td>
-                        <button type="button" class="edit-btn" data-form-id="{{ ville.id }}">Modifier</button> -
-                        <a href="{{ path('ville_supprimer', {'id': ville.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette ville ?')">Supprimer</a>
-                    </td>
-                </form>
+                <th>Ville</th>
+                <th>Code Postal</th>
+                <th>Action</th>
             </tr>
+            </thead>
+            <tbody>
+
+            {% for ville in villes %}
+                <tr>
+                    <form method="post" action="{{ path('ville_modifier', {'id': ville.id}) }}">
+                        <td>
+                            <span class="span{{ ville.id }}">{{ ville.nom }}</span>
+                            <input type="text" name="new_name" value="{{ ville.nom }}" class="hidden-form input{{ ville.id }}" required>
+                        </td>
+                        <td>
+                            <span class="span{{ ville.id }}">{{ ville.codePostal }}</span>
+                            <input type="text" id="new_postalCode_{{ ville.id }}" name="new_postalCode" value="{{ ville.codePostal }}" class="hidden-form input{{ ville.id }}" required>
+                        </td>
+                        <td>
+                            <button type="button" class="edit-btn" data-form-id="{{ ville.id }}">Modifier</button> -
+                            <a href="{{ path('ville_supprimer', {'id': ville.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette ville ?')">Supprimer</a>
+                        </td>
+                    </form>
+                </tr>
+            {% endfor %}
+
+            {# Ajoutez le formulaire de la ville #}
+                <tr>
+                    <td colspan="3">
+                        {{ form_start(villeForm) }}
+                            <tr>
+                                <td>
+                                    {{ form_widget(villeForm.nom, {'attr': {'placeholder': 'Nom de la ville'}}) }}
+                                </td>
+                                <td>
+                                    {{ form_widget(villeForm.codePostal, {'attr': {'placeholder': 'Code Postal'}}) }}
+                                </td>
+                                <td>
+                                    <button type="submit" name="submit" value="valider">Valider</button>
+                                </td>
+                            </tr>
+                        {{ form_end(villeForm) }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        {# Affichez les messages d'erreur ou de succes #}
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger" role="alert">
+                {{ message }}
+            </div>
         {% endfor %}
 
-        {# Ajoutez le formulaire de la ville #}
-        <tr>
-            <td colspan="3">
-                {{ form_start(villeForm) }}
-        <tr>
-            <td>
-                {{ form_widget(villeForm.nom, {'attr': {'placeholder': 'Nom de la ville'}}) }}
-            </td>
-            <td>
-                {{ form_widget(villeForm.codePostal, {'attr': {'placeholder': 'Code Postal'}}) }}
-            </td>
-            <td>
-                <button type="submit" name="submit" value="valider">Valider</button>
-            </td>
-        </tr>
-        {{ form_end(villeForm) }}
-        </td>
-        </tr>
-        </tbody>
-    </table>
-
-    {# Affichez les messages d'erreur ou de succes #}
-    {% for message in app.flashes('error') %}
-        <div class="alert alert-danger" role="alert">
-            {{ message }}
-        </div>
-    {% endfor %}
-
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-        </div>
-    {% endfor %}
-
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </main>
 {% endblock %}
 
-{% block js %}
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let editButtons = document.querySelectorAll(".edit-btn");
-
-            editButtons.forEach(function (button) {
-                button.addEventListener("click", function () {
-                    let formId = button.getAttribute("data-form-id");
-                    let form = document.getElementById("form_" + formId);
-                    let newNameInput = document.getElementById("new_name_" + formId);
-                    let newPostalCodeInput = document.getElementById("new_postalCode_" + formId);
-
-                    // Check if the form is already submitted
-                    if (!form.hasAttribute("data-submitted")) {
-                        // Disable other edit buttons
-                        editButtons.forEach(function (otherButton) {
-                            if (otherButton !== button) {
-                                otherButton.classList.add("disabled-btn");
-                                otherButton.disabled = true;
-                            }
-                        });
-
-                        // Toggle visibility
-                        newNameInput.classList.toggle("hidden-form");
-                        newNameInput.previousElementSibling.classList.toggle("hidden-form");
-
-                        newPostalCodeInput.classList.toggle("hidden-form");
-                        newPostalCodeInput.previousElementSibling.classList.toggle("hidden-form");
-
-                        // Mark the form as submitted
-                        form.setAttribute("data-submitted", "true");
-                    }
-                });
-            });
-
-            // Add a submit event listener to the form to re-enable other edit buttons
-            document.querySelectorAll("form").forEach(function (form) {
-                form.addEventListener("submit", function () {
-                    // Re-enable other edit buttons
-                    editButtons.forEach(function (button) {
-                        button.classList.remove("disabled-btn");
-                        button.disabled = false;
-                    });
-                });
-            });
-        });
-    </script>
-{% endblock %}
+{% block js %}<script src="{{ asset('js/ville-campus.js') }}"></script>{% endblock %}

@@ -27,7 +27,8 @@ class VilleRepository extends ServiceEntityRepository
 
         // Ajoutez des conditions de recherche en fonction du terme de recherche
         if ($searchTerm) {
-            $queryBuilder->andWhere('v.nom LIKE :searchTerm OR v.codePostal LIKE :searchTerm')
+            $queryBuilder
+                ->andWhere('v.nom LIKE :searchTerm OR v.codePostal LIKE :searchTerm')
                 ->setParameter('searchTerm', '%' . $searchTerm . '%');
         }
 

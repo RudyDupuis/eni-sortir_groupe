@@ -2,16 +2,14 @@
 
 namespace App\Controller;
 
-use App\Data\SearchDataRechercher;
 use App\Entity\Campus;
 use App\Form\CampusType;
-use App\Form\SearchFormRechercher;
 use App\Repository\CampusRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 class CampusController extends AbstractController
@@ -23,121 +21,109 @@ class CampusController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    #[Route('/campus', name: 'app_campus', methods: ['GET'])]
-    public function index(Request $request, CampusRepository $campusRepository): Response
+    #[Route('/admin/campus/ajouter', name: 'app_campus')]
+    public function ajouterCampus(Request $request, CampusRepository $campusRepository, EntityManagerInterface $entityManager): Response
     {
-        // Récupérer le form pour le filtre
-        $data = new SearchDataRechercher();
-        $form = $this->createForm(SearchFormRechercher::class, $data);
-        $form->handleRequest($request);
+        $searchTerm = $request->query->get('searchTerm');
 
-        $data = $form->getData();
-        $campuses = $campusRepository->findSearch($data);
+        $nouveauCampus = new Campus();
 
-        return $this->render('pages/campus.html.twig', [
-            'campuses' => $campuses,
-            'form' => $form->createView()
-        ]);
-    }
+        $campus = $campusRepository->findFiltered($searchTerm);
 
-    #[Route('/campus/modifier/{id}', name: 'campus_modifier', methods: ['GET', 'POST'])]
-    public function modifierCampus(Request $request, Campus $campus, ValidatorInterface $validator): Response
-    {
-        if ($request->isMethod('POST')) {
-            $newName = $request->request->get('newName');
+        $campusForm = $this->createForm(CampusType::class, $nouveauCampus);
+        $campusForm->handleRequest($request);
 
-            // Validation du nouveau nom
-            $validationErrors = $validator->validate($newName, [
-                new \Symfony\Component\Validator\Constraints\NotBlank(['message' => 'Le nom du campus ne doit pas être vide.']),
-                new \Symfony\Component\Validator\Constraints\Length([
-                    'max' => 30,
-                    'maxMessage' => 'Le nom du campus ne doit pas dépasser {{ limit }} caractères.',
-                ]),
+        if ($campusForm->isSubmitted() && $campusForm->isValid()) {
+            // Vérifier si le campus existe déjà
+            $existingCampus = $campusRepository->findOneBy([
+                'nom' => $nouveauCampus->getNom()
             ]);
 
-            if (count($validationErrors) === 0) {
-                // Vérifiez si le nom du campus n'existe pas déjà
-                $existingCampus = $this->getDoctrine()->getRepository(Campus::class)->findOneBy(['nom' => $newName]);
-
-                if (!$existingCampus || $existingCampus === $campus) {
-                    // Le nom du campus est valide et n'existe pas déjà (ou il s'agit du même campus), procédez à la modification
-                    $entityManager = $this->getDoctrine()->getManager();
-
-                    // Mettre à jour le nom du campus
-                    $campus->setNom($newName);
-
-                    // Enregistrer les modifications dans la base de données
-                    $entityManager->flush();
-
-                    $this->addFlash('success', 'Le nom du campus a été mis à jour avec succès.');
-                } else {
-                    $this->addFlash('error', 'Le nom du campus existe déjà.');
-                }
+            if ($existingCampus) {
+                // Le campus existe déjà, affichez un message d'erreur
+                $this->addFlash('error', 'Ce campus existe déjà.');
             } else {
-                $this->addFlash('error', 'Le nom du campus ne peut pas être vide.');
-            }
-
-            return $this->redirectToRoute('app_campus');
-        }
-
-        return $this->render('pages/modifier_campus.html.twig', [
-            'campus' => $campus,
-        ]);
-    }
-
-
-
-    #[Route('/campus/supprimer/{id}', name: 'campus_supprimer', methods: ['GET'])]
-    public function supprimerCampus(Campus $campus): Response
-    {
-        $entityManager = $this->doctrine->getManager();
-        $entityManager->remove($campus);
-        $entityManager->flush();
-
-        $this->addFlash('success', 'Campus supprimé avec succès.');
-
-        return $this->redirectToRoute('app_campus');
-    }
-
-    #[Route('/campus/ajouter', name: 'campus_ajouter', methods: ['POST'])]
-    public function ajouterCampus(Request $request, ValidatorInterface $validator): Response
-    {
-        $nouveauCampusNom = $request->request->get('nouveauCampus');
-
-        // Vérifiez si le nom du campus est valide
-        $validationErrors = $validator->validate($nouveauCampusNom, [
-            new \Symfony\Component\Validator\Constraints\NotBlank(['message' => 'Le nom du campus ne doit pas être vide.']),
-            new \Symfony\Component\Validator\Constraints\Length([
-                'max' => 30,
-                'maxMessage' => 'Le nom du campus ne doit pas dépasser {{ limit }} caractères.',
-            ]),
-        ]);
-
-        if (count($validationErrors) === 0) {
-            // Vérifiez si le nom du campus n'existe pas déjà
-            $existingCampus = $this->doctrine->getRepository(Campus::class)->findOneBy(['nom' => $nouveauCampusNom]);
-
-            if (!$existingCampus) {
-                // Le nom du campus est valide et n'existe pas déjà, procédez à l'ajout
-                $entityManager = $this->doctrine->getManager();
-
-                // Créez une nouvelle instance de l'entité Campus
-                $nouveauCampus = new Campus();
-                $nouveauCampus->setNom($nouveauCampusNom);
-
-                // Persistez l'entité dans la base de données
+                // La ville n'existe pas encore, persistez-la
                 $entityManager->persist($nouveauCampus);
                 $entityManager->flush();
 
                 $this->addFlash('success', 'Nouveau campus ajouté avec succès.');
-            } else {
-                $this->addFlash('error', 'Le nom du campus existe déjà.');
+
+                return $this->redirectToRoute('app_campus');
             }
-        } else {
-            $this->addFlash('error', 'Le nom du campus ne peut pas être vide.');
         }
 
-        // Redirigez vers la page principale des campus
+        return $this->render('pages/campus.html.twig', [
+            'campusForm' => $campusForm->createView(),
+            'campus' => $campus,
+            'searchTerm' => $searchTerm,
+        ]);
+    }
+
+    #[Route('/admin/campus/{id}/modifier', name: 'campus_modifier', methods: ['POST'])]
+    public function modifierCampus(Request $request, CampusRepository $campusRepository, Campus $campus, EntityManagerInterface $entityManager): Response
+    {
+        $newName = $request->request->get('new_name');
+
+        if (empty($newName)) {
+            // Affiche un message d'erreur
+            $this->addFlash('error', 'Veuillez remplir tous les champs.');
+            return $this->redirectToRoute('app_campus'); // Redirige vers la page souhaitée
+        }
+
+        $existingCampus = $campusRepository->findOneBy(['nom' => $newName]);
+
+        if ($existingCampus && $existingCampus->getId() !== $campus->getId()) {
+            // Affiche un message d'erreur si le campus existe déjà
+            $this->addFlash('error', 'Le campus existe déjà dans la base de données.');
+            return $this->redirectToRoute('app_campus'); // Redirige vers la page souhaitée
+        }
+
+        $campus->setNom($newName);
+
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Le campus a été modifiée avec succès.');
+
+        // Redirige vers la page souhaitée après la modification.
         return $this->redirectToRoute('app_campus');
+    }
+
+
+
+    #[Route('/admin/campus/{id}/supprimer/', name: 'campus_supprimer', methods: ['GET'])]
+    public function supprimerCampus(Campus $campus): Response
+    {
+        // Vérifier si le campus est utilisée dans une sortie
+        if ($this->isCampusUsed($campus)) {
+            $this->addFlash('error', 'Le campus est utilisé et ne peut pas être supprimée.');
+        } else {
+            $entityManager = $this->doctrine->getManager();
+            $entityManager->remove($campus);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Campus supprimée avec succès.');
+        }
+
+        return $this->redirectToRoute('app_campus');
+    }
+
+    /**
+     * Vérifie si le campus est utilisé.
+     *
+     * @param Campus $campus
+     * @return bool
+     */
+    private function isCampusUsed(Campus $campus): bool
+    {
+        // Récupérer les lieux associés à la ville
+        $participants = $campus->getParticipants();
+        $sorties = $campus->getSorties();
+
+        if (count($participants) !== 0 || count($sorties) !== 0) {
+            return true;
+        }
+
+        return false;
     }
 }

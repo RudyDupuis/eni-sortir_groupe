@@ -2,8 +2,6 @@
 
 namespace App\Repository;
 
-use App\Data\SearchData;
-use App\Data\SearchDataRechercher;
 use App\Entity\Campus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,25 +25,19 @@ class CampusRepository extends ServiceEntityRepository
      * Récupère les campus en lien avec une recherche
      * @return Campus[]
      */
-    public function findSearch(?SearchDataRechercher $searchDataRechercher = null): array
+    public function findFiltered($searchTerm = null): array
     {
-        $query = $this
-            ->createQueryBuilder('s')
-            ->select('s');
+        $queryBuilder = $this->createQueryBuilder('s');
 
-        if ($searchDataRechercher !== null) {
-
-            // Filtre par nom (champs recherche)
-            if (!empty($searchDataRechercher->rechercher)) {
-                $query = $query
-                    ->andWhere('s.nom LIKE :rechercher')
-                    ->setParameter('rechercher', "%{$searchDataRechercher->rechercher}%");
-            }
+        if ($searchTerm) {
+            $queryBuilder
+                ->andWhere('s.nom LIKE :searchTerm')
+                ->setParameter('searchTerm', "%" . $searchTerm . "%");
         }
 
-        return $query->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getResult();
     }
-}
+
     public function rechercheParNom(string $nom): ?Campus
     {
         return $this->createQueryBuilder('c')
