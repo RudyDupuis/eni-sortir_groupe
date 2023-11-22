@@ -128,23 +128,73 @@ class SortieController extends AbstractController
     }
 
     #[Route('/ville/{id}/lieux')]
-    public function recupererLieuxDuneVille(LieuRepository $lieuRepository, VilleRepository $villeRepository, int $id)
-    {
-        $ville = $villeRepository->find($id);
-        $lieux = $lieuRepository->rechercheParVille($ville);
+public function recupererLieuxDuneVille(LieuRepository $lieuRepository, VilleRepository $villeRepository, int $id)
+{
+    $ville = $villeRepository->find($id);
+    $lieux = $lieuRepository->rechercheParVille($ville);
 
+    $lieuxTableau = [];
+    foreach ($lieux as $lieu) {
+        $lieuxTableau[] = [
+            'id' => $lieu->getId(),
+            'nom' => $lieu->getNom(),
+            'rue' => $lieu->getRue(),
+            'codePostal' => $ville->getCodePostal(),
+            'latitude' => $lieu->getLatitude(),
+            'longitude' => $lieu->getLongitude(),
+        ];
+    }
+    return new JsonResponse($lieuxTableau);
+}
+
+    #[Route('/sortie/{id}/supprimer', name: 'sortie_supprimer')]
+    public function supprimerSortie(int $id, EntityManagerInterface $entityManager): Response
+    {
+        // Récupérer la sortie depuis la base de données
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
+        // Supprimer la sortie
+        $entityManager->remove($sortie);
+        $entityManager->flush();
+
+        // Rechargement de la page après la suppression
+        return $this->render('pages/modifierSortie.html.twig');
+    }
+
+    #[Route('/sortie/modifier/{id}', name: 'sortie_modifier')]
+    public function modifier(Request $request, EntityManagerInterface $entityManager, LieuRepository $lieuRepository, int $id): Response
+    {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
+        $sortieForm->handleRequest($request);
+
+        // Récupération de la liste des lieux
+        $lieux = $lieuRepository->findAll();
         $lieuxTableau = [];
         foreach ($lieux as $lieu) {
+            $ville = $lieu->getVille();
+            $codePostal = $ville ? $ville->getCodePostal() : null;
             $lieuxTableau[] = [
                 'id' => $lieu->getId(),
                 'nom' => $lieu->getNom(),
                 'rue' => $lieu->getRue(),
-                'codePostal' => $ville->getCodePostal(),
+                'codePostal' => $codePostal,
                 'latitude' => $lieu->getLatitude(),
                 'longitude' => $lieu->getLongitude(),
             ];
         }
+        $lieuxJson = json_encode($lieuxTableau);
 
-        return new JsonResponse($lieuxTableau);
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+            $entityManager->flush();
+            return $this->redirectToRoute('app_accueil');
+        }
+
+        return $this->render('pages/modifierSortie.html.twig', [
+            'sortieForm' => $sortieForm->createView(),
+            'lieux' => $lieuxJson // Passer les données des lieux au template
+        ]);
     }
+
 }

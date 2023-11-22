@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une sortie {{parent()}}{% endblock %}
+
+{% block body %}
+    <main>
+        <h1 class="mb-64 tac">Modifier une sortie</h1>
+
+        <div class="f-col a-cent">
+            {{ form_start(sortieForm, {'attr': {'class': 'custom-flex-wrapper'}}) }}
+            {{ form_widget(sortieForm) }}
+            <div>
+                <div>
+                    <label for="campus">Campus</label>
+                    <input type="text" id="Campus" value="{{ app.user.campus.nom }}" readonly class="mb-32 ml-32" name="campus"/>
+                </div>
+
+                <div>
+                    <label for="lieu">Lieu</label>
+                    <select id="lieu" class="mb-32 ml-32" name="lieu">
+                        {% for lieu in lieux %}
+                            <option value="{{ lieu.id }}">{{ lieu.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label for="rue">Rue</label>
+                    <input type="text" id="rue" value="" readonly class="mb-32 ml-32"/>
+                </div>
+
+                <div>
+                    <label for="codePostal">Code Postal</label>
+                    <input type="text" id="codePostal" value="" readonly class="mb-32 ml-32"/>
+                </div>
+
+                <div>
+                    <label for="latitude">Latitude</label>
+                    <input type="text" id="latitude" value="" readonly class="mb-32 ml-32"/>
+                </div>
+
+                <div>
+                    <label for="longitude">Longitude</label>
+                    <input type="text" id="longitude" value="" readonly class="mb-32 ml-32"/>
+                </div>
+
+                <div class="boutons_reponsive">
+                    <button type="submit" name="submit" value="enregistrer">Enregistrer</button>
+                    <button type="submit" name="submit" value="publier">Publier la sortie</button>
+                    <button class="btn-danger ml-32" type="submit" name="submit" value="supprimer">Supprimer la sortie</button>
+                    <button class="btn-danger " type="reset">Annuler</button>
+                </div>
+            </div>
+
+            {{ form_end(sortieForm) }}
+        </div>
+    </main>
+{% endblock %}
+
+{% block js %}
+    <script src="{{ asset('js/modifierSortie.js') }}"></script>
+    <script>
+        const lieuxData = {{ lieux|json_encode|raw }};
+        // Utilisez lieuxData dans votre JavaScript pour initialiser les lieux et leurs valeurs
+    </script>
+{% endblock %}
