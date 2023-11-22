@@ -74,7 +74,7 @@ class AdminController extends AbstractController
                     $this->addFlash('erreurMail' . $record['Mail'], sprintf("Le mail '%s' est déjà utilisé, le participant n'est pas ajouté", $record['Mail']));
                 }
 
-                if (!$testMail && !$testPseudo) {
+                if ($testMail == null && $testPseudo == null) {
                     $participant = new Participant();
                     $error = false;
 
