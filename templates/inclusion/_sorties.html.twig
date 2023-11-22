@@ -15,14 +15,15 @@
                     {% endif %}
                 {% endfor %}
 
-
                 {% if sortie.organisateur == app.user %}
                     {% if sortie.etat.libelle == "Créée" %}
                         <a href="{{ path('sortie_modifier', {'id': sortie.id}) }}">Modifier</a> -
                         <a href="{{ path('sortie_publier', {'id': sortie.id}) }}">Publier</a>
                     {% elseif sortie.etat.libelle == "Ouverte" or sortie.etat.libelle == "Clôturée" %}
-                        <a href="{{ path('sortie_informationSortie', {'id': sortie.id}) }}">Afficher</a> -
-                        <a href="">Annuler</a>
+                        <a href="{{ path('sortie_informationSortie', {'id': sortie.id}) }}">Afficher</a>
+                        {% if app.user.isAdministrateur == false %}
+                            - <a href="">Annuler</a>
+                        {% endif %}
                     {% else %}
                         <a href="{{ path('sortie_informationSortie', {'id': sortie.id}) }}">Afficher</a>
                     {% endif %}
@@ -37,5 +38,9 @@
                     {% elseif sortie.etat.libelle == "Ouverte" and isUserParticipant %}
                         - <a href="{{ path('sortie_inscription', {'id': sortie.id}) }}">Se désister</a>
                     {% endif %}
-                {% endif %}            
+                {% endif %}   
+
+                {% if app.user.isAdministrateur %}
+                    - <a href="">Annuler</a>
+                {% endif %}         
         </td>
