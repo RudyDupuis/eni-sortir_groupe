@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% block css %}{% endblock %}
+
+{% block title %}Campus {{parent()}}{% endblock %}
+
+{% block body %}
+
+    <h1>Gérer les campus</h1>
+
+    <h2 class="mb-32">Filtrer les sites</h2>
+
+    {% include 'inclusion/_filtreCampus.html.twig' with {form: form} only %}
+
+    <table>
+        <thead>
+        <tr>
+            <th>Campus</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+         {% include 'inclusion/_campus.html.twig' with {campuses: campuses} only %}
+        </tbody>
+    </table>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block js %}
+    {{ parent() }}
+    <script src="{{ asset('js/Campus.js') }}"></script>
+{% endblock %}

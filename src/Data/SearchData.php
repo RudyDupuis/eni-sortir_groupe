@@ -9,7 +9,7 @@ class SearchData
      /**
      * @var string
      */
-    public $q = '';
+    public $rechercher = '';
 
     /**
      * @var Campus|null
