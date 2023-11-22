@@ -175,6 +175,10 @@ button:hover {
     justify-content: space-evenly;
 }
 
+.f-wrap {
+    flex-wrap: wrap;
+}
+
 /***** margin padding *****/
 .mb-16 {
     margin-bottom: 16px;
@@ -186,6 +190,10 @@ button:hover {
 
 .mb-64 {
     margin-bottom: 64px;
+}
+
+.ml-64 {
+    margin-left: 64px;
 }
 
 .ml-32 {
@@ -235,6 +243,7 @@ header {
     }
     nav {
         margin-top: 32px;
+        max-width: 80%;
     }
 }
 
@@ -295,5 +304,67 @@ form:first-child div {
 @media (max-width: 800px) {
     .span-200-strong {
         width:max-content;
+    }
+}
+
+/*** Photo de profil ***/
+.profile_img {
+    width: 200px;
+    height: 200px;
+}
+
+/*** Mot de passe oublié ***/
+.mdp_oublie{
+    text-decoration: underline;
+    text-transform: none;
+}
+
+/*** Tableau ***/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    background: #fff;
+    margin-bottom: 64px;
+}
+
+table th {
+    background: #d8d8d8;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+table th,
+table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+@media screen and (max-width: 900px) {
+    table {
+        overflow-x: auto;
+        display: block;
+    }
+    table thead {
+        display: none;
+    }
+    table tbody,
+    table tr,
+    table td {
+        display: block;
+        width: 100%;
+    }
+    table td {
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        float: left;
+        text-transform: uppercase;
+        margin-right: 5px;
     }
 }

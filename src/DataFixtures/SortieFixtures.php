@@ -43,7 +43,7 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
         for ($i = 1; $i <= 10; $i++) {
             $sortie = new Sortie();
             $sortie->setNom($faker->text(40));
-            $sortie->setDateLimiteInscription($faker->dateTimeBetween('now', '+1 month'));
+            $sortie->setDateLimiteInscription($faker->dateTimeBetween('-1 month', '+1 month'));
             $sortie->setDateHeureDebut($faker->dateTimeBetween($sortie->getDateLimiteInscription(), '+2 month'));
             $sortie->setDuree($faker->numberBetween(10, 350));
             $sortie->setNbInscriptionsMax($faker->numberBetween(10, 30));
@@ -52,7 +52,7 @@ class SortieFixtures extends Fixture implements DependentFixtureInterface
                 $sortie->setInfosSortie($faker->paragraph);
             }
 
-            $sortie->setEtat($faker->randomElement($etatReferences));
+            $sortie->setEtat($etatReferences[1]);
             $sortie->setLieu($faker->randomElement($lieuReferences));
             $sortie->setSiteOrganisateur($faker->randomElement($campusReferences));
             $sortie->setOrganisateur($faker->randomElement($particiantReferences));

@@ -46,3 +46,12 @@ class CampusRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 }
+    public function rechercheParNom(string $nom): ?Campus
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.nom = :nom')
+            ->setParameter('nom', $nom)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+}

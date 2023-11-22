@@ -33,7 +33,10 @@ class SortieRepository extends ServiceEntityRepository
     {
         $query = $this
             ->createQueryBuilder('s')
-            ->select('s');
+            ->select('s')
+            ->leftJoin('s.etat', 'etat')
+            ->andWhere('etat.libelle != :etatHistorisee')
+            ->setParameter('etatHistorisee', 'historisee');
 
         if ($searchData !== null) {
 
@@ -91,13 +94,14 @@ class SortieRepository extends ServiceEntityRepository
 
                 $query = $query
                     ->andWhere($query->expr()->notIn('s.id', $subquery->getDQL()))
-                    ->setParameter('userId', $user->getId());
+                    ->setParameter('userId', $user->getId())
+                    ->andWhere('etat.libelle = :etatOuverte')
+                    ->setParameter('etatOuverte', 'ouverte');
             }
 
             // Filtrer les sorties en fonction de leur état
             if (!empty($searchData->utilite4)) {
                 $query = $query
-                    ->join('s.etat', 'etat')
                     ->andWhere('etat.libelle = :etatPassee')
                     ->setParameter('etatPassee', 'passee');
             }
@@ -106,4 +110,3 @@ class SortieRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 }
-

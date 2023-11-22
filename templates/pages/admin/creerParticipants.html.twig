@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer des participants {{ parent() }}{% endblock %}
+
+{% block body %}
+<main>
+    <h1 class="mb-64 tac">Créer des participants</h1>
+
+    <div class="f-col a-cent j-even">
+        {{ form_start(csvForm) }}
+
+        {{ form_widget(csvForm) }}
+
+        <div class="f a-cent j-cent boutons_reponsive mb-64">
+            <button class="btn-scdr" type="submit">Envoyer</button>
+        </div>
+
+        {{ form_end(csvForm) }}
+        
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+    </div>
+</main>
+{% endblock %}
+
+

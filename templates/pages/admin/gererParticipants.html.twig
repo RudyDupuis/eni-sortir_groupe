@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les participants {{parent()}}{% endblock %}
+
+{% block body %}
+<main>
+    <h1 class="mb-64 tac">Gérer les participants</h1>
+
+    <table>
+            <thead>
+            <tr>
+                <th>Participant</th>
+                <th>Actif</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+        {% for participant in participants %}
+            <tr>
+                <td data-label="Pseudo">
+                    {{ participant.pseudo }}
+                </td>
+                <td>
+                    {{ participant.actif ? "Actif" : "Inactif" }}
+                </td>
+                <td>
+                    <a href="{{ path('admin_supp_participant', {'id': participant.id}) }}" onclick="confirm('Êtes-vous sûr de vouloir supprimer ce participant ?')">Supprimer</a>
+                </td>
+                <td>
+                    <a href="{{ path('admin_desa_participant', {'id': participant.id}) }}">{{ participant.actif ? "Désactiver" : "Réactiver" }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+            </tbody>
+    </table>
+</main>
+{% endblock %}
