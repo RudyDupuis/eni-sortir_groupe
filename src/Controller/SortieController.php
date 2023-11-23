@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Data\SearchData;
+use App\Form\AnnulationSortieType;
 use App\Form\SearchForm;
 use App\Repository\CampusRepository;
 use App\Repository\SortieRepository;
@@ -202,5 +203,36 @@ class SortieController extends AbstractController
             $entityManager->flush();
         }
         return $this->redirectToRoute('app_accueil');
+    }
+    #[Route('/sortie/{id}/annuler', name: 'sortie_annuler')]
+    public function annuler(Request $request, EntityManagerInterface $entityManager, SortieRepository $sortieRepository, int $id): Response
+    {
+        $sortie = $sortieRepository->find($id);
+
+        // Créer une instance du formulaire AnnulationSortieType
+        $formAnnulationSortie = $this->createForm(AnnulationSortieType::class, $sortie);
+
+        // Gérer la soumission du formulaire
+        $formAnnulationSortie->handleRequest($request);
+
+        if ($formAnnulationSortie->isSubmitted() && $formAnnulationSortie->isValid()) {
+            // Mettez à jour l'état de la sortie
+            $data = $formAnnulationSortie->getData();
+
+            $sortie->setInfosSortie((string) $data);
+
+            // La raison d'annulation est déjà stockée dans le champ infosSortie du formulaire
+            // Pas besoin de le récupérer séparément, vous pouvez utiliser $sortie->getInfosSortie()
+
+            $entityManager->flush();
+
+            // Redirigez vers la page d'accueil ou une autre page
+            return $this->redirectToRoute('accueil');
+        }
+
+        return $this->render('pages/annulerSortie.html.twig', [
+            'sortie' => $sortie,
+            'formAnnulationSortie' => $formAnnulationSortie->createView(),
+        ]);
     }
 }
