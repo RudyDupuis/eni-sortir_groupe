@@ -167,7 +167,6 @@ class SortieController extends AbstractController
 
             if ($idLieu && $submit) {
                 $lieu = $lieuRepository->find($idLieu);
-                dump($lieu);
                 $etat = ($submit == "enregistrer") ? $etatRepository->rechercheParLibelle("Créée") : $etatRepository->rechercheParLibelle("Ouverte");
 
                 $sortie->setLieu($lieu);
