@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="{{ asset('style/main.css') }}">
     {% block css %}{% endblock %}
 </head>
-<body>
+<body style="background: url({{ asset('images/bg700px.png') }}) left bottom / auto no-repeat;">
+
     <header class="f a-cent j-betw">
         <a href="{{ path('app_accueil') }}"><img src="{{ asset('images/logo.png') }}" alt="Sorti"></a>
         {% include ('inclusion/_nav.html.twig') %}

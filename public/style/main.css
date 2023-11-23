@@ -218,11 +218,6 @@ button:hover {
 
 /****** Componants *****/
 
-/*** Body ***/
-body {
-    background: url(../../images/bg700px.png) left bottom / auto no-repeat;
-}
-
 /*** Main ***/
 main {
     min-height: calc(100vh - 160px);
