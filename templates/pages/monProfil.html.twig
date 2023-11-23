@@ -3,8 +3,12 @@
 {% block title %}Mon profil {{ parent() }}{% endblock %}
 
 {% block body %}
-<main>
+<main class="f-col a-cent">
     <h1 class="mb-64 tac">Mon Profil</h1>
+
+    {% if participant.photoDeProfil %}
+            <div class="profile_img mb-64" style="background-image: url('{{ asset('photos_de_profil/' ~ participant.photoDeProfil) }}'); background-size: cover; background-position: center;"></div>
+    {% endif %}
 
     <div class="f-col a-cent j-even">
         {{ form_start(participantForm) }}
