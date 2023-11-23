@@ -6,8 +6,10 @@
             <li class="ml-16"><a href="{{ path('app_campus') }}" title="Campus">Campus</a></li>
         {% endif %}
 
-        <li class="ml-16"><a href="{{ path('app_accueil') }}" title="Accueil">Accueil</a></li>
-        <li class="ml-16"><a href="{{ path('app_profil') }}" title="Mon profil">Mon profil</a></li>
-        <li class="ml-16"><a href="{{ path('app_logout') }}" title="Se déconnecter">Se déconnecter</a></li>
+        {% if app.user %}
+            <li class="ml-16"><a href="{{ path('app_accueil') }}" title="Accueil">Accueil</a></li>
+            <li class="ml-16"><a href="{{ path('app_profil') }}" title="Mon profil">Mon profil</a></li>
+            <li class="ml-16"><a href="{{ path('app_logout') }}" title="Se déconnecter">Se déconnecter</a></li>
+        {% endif %}
     </ul>
 </nav>
