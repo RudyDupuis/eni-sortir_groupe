@@ -41,7 +41,7 @@ class CampusController extends AbstractController
 
             if ($existingCampus) {
                 // Le campus existe déjà, affichez un message d'erreur
-                $this->addFlash('error', 'Ce campus existe déjà.');
+                $this->addFlash('error', 'Ce campus n\'existe déjà.');
             } else {
                 // La ville n'existe pas encore, persistez-la
                 $entityManager->persist($nouveauCampus);
