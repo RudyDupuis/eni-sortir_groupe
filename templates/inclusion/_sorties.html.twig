@@ -35,7 +35,7 @@
                         {% else %}
                             - <a href="{{ path('sortie_inscription', {'id': sortie.id}) }}">S'inscrire</a>
                         {% endif %}
-                    {% elseif sortie.etat.libelle == "Ouverte" and isUserParticipant %}
+                    {% elseif sortie.etat.libelle == "Clôturée" and isUserParticipant %}
                         - <a href="{{ path('sortie_inscription', {'id': sortie.id}) }}">Se désister</a>
                     {% endif %}
                 {% endif %}   
