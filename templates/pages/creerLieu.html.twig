@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un lieu {{parent()}}{% endblock %}
+
+{% block body %}
+    <main>
+        <h1 class="mb-64 tac">Créer un lieu</h1>
+
+        <div class="f-col a-cent j-even">
+            {{ form_start(lieuForm, {'attr': {'class': 'f-col a-cent'}}) }}
+                {{ form_widget(lieuForm) }}
+
+                <button type="submit" class="mb-16">Enregistrer</button>
+                <button onclick="window.history.back()" class="btn-danger">Retour</button>
+
+            {{ form_end(lieuForm) }}
+        </div>
+    </main>
+{% endblock %}

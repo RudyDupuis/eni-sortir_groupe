@@ -10,23 +10,8 @@ h2 {
 }
 
 table {
-    background-color: #fff;
-    border-collapse: collapse;
-    border: 1px solid #ddd;
-}
-
-table th {
-    background: #d8d8d8;
-}
-
-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-table th,
-table td {
-    padding: 8px;
-    border: 1px solid #ddd;
+    width: auto;
+    margin-bottom: 0;
 }
 
 @media (max-width: 1050px) {

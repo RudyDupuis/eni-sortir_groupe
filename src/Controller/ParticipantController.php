@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Form\ProfilType;
 use App\Repository\ParticipantRepository;
+use App\Service\ImageManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,7 +39,7 @@ class ParticipantController extends AbstractController
     }
 
     #[Route(path: '/mon-profil', name: 'app_profil')]
-    public function profil(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
+    public function profil(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager, ImageManager $imageManager): Response
     {
         /** @var \App\Entity\Participant $participant */
         $participant = $this->getUser();
@@ -53,6 +54,13 @@ class ParticipantController extends AbstractController
                 $hashedPassword = $passwordHasher->hashPassword(user: $participant, plainPassword: $champPassword);
                 $participant->setMotPasse($hashedPassword);
             }
+
+            $newFileName = $imageManager->saveImage($participantForm->get('photoDeProfil')->getData(), $participant->getPhotoDeProfil(), 'profile_pictures_directory');
+
+            if ($newFileName) {
+                $participant->setPhotoDeProfil($newFileName);
+            }
+
 
             $entityManager->persist($participant);
             $entityManager->flush();

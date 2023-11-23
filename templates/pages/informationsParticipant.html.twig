@@ -6,6 +6,10 @@
     <main class="f-col a-cent">
         <h1 class="tac mb-64">{{ participant.pseudo }}</h1>
 
+        {% if participant.photoDeProfil %}
+            <div class="profile_img mb-64" style="background-image: url('{{ asset('photos_de_profil/' ~ participant.photoDeProfil) }}'); background-size: cover; background-position: center;"></div>
+        {% endif %}
+
         <div class="mb-64">
             <div><span class="span-200-strong">Prénom :</span> {{ participant.prenom }}</div>
             <div><span class="span-200-strong">Nom :</span> {{ participant.nom }}</div>

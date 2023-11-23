@@ -41,10 +41,10 @@ class SortieRepository extends ServiceEntityRepository
         if ($searchData !== null) {
 
             // Filtre par nom (champs recherche)
-            if (!empty($searchData->q)) {
+            if (!empty($searchData->rechercher)) {
                 $query = $query
-                    ->andWhere('s.nom LIKE :q')
-                    ->setParameter('q', "%{$searchData->q}%");
+                    ->andWhere('s.nom LIKE :rechercher')
+                    ->setParameter('rechercher', "%{$searchData->rechercher}%");
             }
 
             // Filtrer par campus (champs campus)

@@ -15,10 +15,10 @@ use App\Repository\LieuRepository;
 use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class SortieController extends AbstractController
 {
@@ -69,7 +69,7 @@ class SortieController extends AbstractController
 
         if ($idLieu && $submit) {
             $lieu = $lieuRepository->find($idLieu);
-            $etat = ($submit == "enregistrer") ? $etatRepository->find(1) : $etatRepository->find(2);
+            $etat = ($submit == "enregistrer") ? $etatRepository->rechercheParLibelle("Créée") : $etatRepository->rechercheParLibelle("Ouverte");
 
             $sortie->setLieu($lieu);
             $sortie->setEtat($etat);
@@ -128,25 +128,81 @@ class SortieController extends AbstractController
         return $this->redirectToRoute('app_accueil');
     }
 
-    #[Route('/ville/{id}/lieux')]
-    public function recupererLieuxDuneVille(LieuRepository $lieuRepository, VilleRepository $villeRepository, int $id)
+    #[Route('/sortie/{id}/supprimer', name: 'sortie_supprimer')]
+    public function supprimerSortie(int $id, EntityManagerInterface $entityManager, SortieRepository $sortieRepository): Response
     {
-        $ville = $villeRepository->find($id);
-        $lieux = $lieuRepository->rechercheParVille($ville);
+        // Récupérer la sortie depuis la base de données
+        $sortie = $sortieRepository->find($id);
 
-        $lieuxTableau = [];
-        foreach ($lieux as $lieu) {
-            $lieuxTableau[] = [
-                'id' => $lieu->getId(),
-                'nom' => $lieu->getNom(),
-                'rue' => $lieu->getRue(),
-                'codePostal' => $ville->getCodePostal(),
-                'latitude' => $lieu->getLatitude(),
-                'longitude' => $lieu->getLongitude(),
-            ];
+        if ($this->getUser() !== $sortie->getOrganisateur()) {
+            throw new AccessDeniedException("Accès interdit. Vous n'êtes pas l'organisateur de cette sortie.");
         }
 
-        return new JsonResponse($lieuxTableau);
+        $entityManager->remove($sortie);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_accueil');
+    }
+
+    #[Route('/sortie/{id}/modifier', name: 'sortie_modifier')]
+    public function modifier(Request $request, EntityManagerInterface $entityManager, LieuRepository $lieuRepository, EtatRepository $etatRepository, int $id): Response
+    {
+
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
+        if ($this->getUser() !== $sortie->getOrganisateur()) {
+            throw new AccessDeniedException("Accès interdit. Vous n'êtes pas l'organisateur de cette sortie.");
+        }
+
+        $sortieForm = $this->createForm(SortieType::class, $sortie);
+        $sortieForm->handleRequest($request);
+
+        // Récupération de la liste des lieux
+        $lieux = $lieuRepository->findAll();
+
+
+        if ($sortieForm->isSubmitted() && $sortieForm->isValid()) {
+
+            $idLieu = $request->request->get('lieu', '');
+            $submit = $request->request->get('submit', '');
+
+            if ($idLieu && $submit) {
+                $lieu = $lieuRepository->find($idLieu);
+                dump($lieu);
+                $etat = ($submit == "enregistrer") ? $etatRepository->rechercheParLibelle("Créée") : $etatRepository->rechercheParLibelle("Ouverte");
+
+                $sortie->setLieu($lieu);
+                $sortie->setEtat($etat);
+            }
+
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+            return $this->redirectToRoute('app_accueil');
+        }
+
+        return $this->render('pages/modifierSortie.html.twig', [
+            'sortieForm' => $sortieForm->createView(),
+            'lieux' => $lieux,
+            'sortie' => $sortie,
+        ]);
+    }
+
+    #[Route('/sortie/{id}/publier', name: 'sortie_publier')]
+    public function publier(EntityManagerInterface $entityManager, SortieRepository $sortieRepository, EtatRepository $etatRepository, int $id): Response
+    {
+        $sortie = $sortieRepository->find($id);
+
+        if ($this->getUser() !== $sortie->getOrganisateur()) {
+            throw new AccessDeniedException("Accès interdit. Vous n'êtes pas l'organisateur de cette sortie.");
+        }
+
+        if ($sortie->getEtat()->getLibelle() === "Créée") {
+            $sortie->setEtat($etatRepository->rechercheParLibelle("Ouverte"));
+
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('app_accueil');
     }
     #[Route('/sortie/{id}/annuler', name: 'sortie_annuler')]
     public function annuler(Request $request, EntityManagerInterface $entityManager, SortieRepository $sortieRepository, int $id): Response

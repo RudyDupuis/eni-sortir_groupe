@@ -87,6 +87,9 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'organisateur', targetEntity: Sortie::class, orphanRemoval: true)]
     private Collection $sortiesOrganisees;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photoDeProfil = null;
+
     public function __construct()
     {
         $this->sortiesInscrites = new ArrayCollection();
@@ -311,6 +314,18 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
                 $sortiesOrganisees->setOrganisateur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhotoDeProfil(): ?string
+    {
+        return $this->photoDeProfil;
+    }
+
+    public function setPhotoDeProfil(?string $photoDeProfil): static
+    {
+        $this->photoDeProfil = $photoDeProfil;
 
         return $this;
     }
