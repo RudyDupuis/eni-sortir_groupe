@@ -81,7 +81,9 @@ class SortieRepository extends ServiceEntityRepository
                 $query = $query
                     ->join('s.participants', 'participant')
                     ->andWhere('participant = :user')
-                    ->setParameter('user', $user);
+                    ->setParameter('user', $user)
+                    ->andWhere('etat.libelle != :etatPassee')
+                    ->setParameter('etatPassee', 'passee');
             }
 
             // Filtrer les sorties auxquelles l'utilisateur ne participe pas
