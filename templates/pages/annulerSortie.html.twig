@@ -1,5 +1,4 @@
 {% extends 'base.html.twig' %}
-{% block css %}<link rel="stylesheet" href="{{ asset('style/pages/informationsSortie.css') }}">{% endblock %}
 
 {% block title %}Annuler une sortie{{parent()}}{% endblock %}
 
@@ -7,23 +6,19 @@
     <main class="f-col a-cent">
         <h1 class="mb-64 tac">Annuler une sortie</h1>
 
-        <section class="f a-cent mb-64 sortie-infos">
-            <div>
+        <section class="f-col mb-64">
                 <p class="mb-16"><span class="span-200-strong">Nom de la sortie :</span> {{ sortie.nom }}</p>
                 <p class="mb-16"><span class="span-200-strong">Date et heure de la sortie :</span> le {{ sortie.dateHeureDebut.format('d M Y à h:i') }}</p>
                 <p class="mb-16"><span class="span-200-strong">Campus :</span>  {{ sortie.siteOrganisateur.nom }}</p>
-                <p class="mb-16"><span class="span-200-strong">Lieu :</span>  {{ sortie.lieu.nom }}</p>
+                <p class="mb-16"><span class="span-200-strong">Lieu :</span> {{ sortie.lieu.nom }} {{ sortie.lieu.rue }} {{ sortie.lieu.ville.codePostal }} {{ sortie.lieu.ville.nom }}</p>
 
-                {{ form_start(formAnnulationSortie) }}
-                <div style="display: flex; flex-direction: column; align-items: center;">
+                {{ form_start(formAnnulationSortie, {'attr': {'class': 'f-col a-cent'}}) }}
                     {{ form_widget(formAnnulationSortie) }}
-                    <div style="display: flex; justify-content: space-between; width: 100%;">
+                    <div class="boutons_reponsive">
                         <button type="submit">Enregistrer</button>
-                        <button type="button" onclick="window.history.back()">Annuler</button>
+                        <button type="button" class="btn-danger ml-16" onclick="window.history.back()">Annuler</button>
                     </div>
-                </div>
                 {{ form_end(formAnnulationSortie) }}
-            </div>
         </section>
     </main>
 {% endblock %}

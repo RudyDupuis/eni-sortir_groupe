@@ -16,16 +16,14 @@ class AnnulationSortieType extends AbstractType
         $builder
             ->add('infosSortie', TextareaType::class, [
                 'label' => "Motif de l'annulation : ",
-
-                'required' => true,
-                'attr' => ['class' => 'f'], // Ajoutez d'autres attributs selon vos besoins
+                'attr' => ['class' => 'f mb-64'], // Ajoutez d'autres attributs selon vos besoins
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Sortie::class, // Remplacez VotreEntity par la classe de votre entité Sortie
+            'data_class' => Sortie::class,
         ]);
     }
 }

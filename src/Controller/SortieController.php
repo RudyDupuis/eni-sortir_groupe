@@ -204,35 +204,34 @@ class SortieController extends AbstractController
         }
         return $this->redirectToRoute('app_accueil');
     }
+
     #[Route('/sortie/{id}/annuler', name: 'sortie_annuler')]
-    public function annuler(Request $request, EntityManagerInterface $entityManager, SortieRepository $sortieRepository, int $id): Response
+    public function annuler(Request $request, EntityManagerInterface $entityManager, SortieRepository $sortieRepository, EtatRepository $etatRepository, int $id): Response
     {
         $sortie = $sortieRepository->find($id);
 
-        // Créer une instance du formulaire AnnulationSortieType
-        $formAnnulationSortie = $this->createForm(AnnulationSortieType::class, $sortie);
+        /** @var \App\Entity\Participant $user */
+        $user = $this->getUser();
 
-        // Gérer la soumission du formulaire
-        $formAnnulationSortie->handleRequest($request);
+        if ($user == $sortie->getOrganisateur() || $user->isAdministrateur()) {
+            $formAnnulationSortie = $this->createForm(AnnulationSortieType::class, $sortie);
+            $formAnnulationSortie->handleRequest($request);
 
-        if ($formAnnulationSortie->isSubmitted() && $formAnnulationSortie->isValid()) {
-            // Mettez à jour l'état de la sortie
-            $data = $formAnnulationSortie->getData();
+            if ($formAnnulationSortie->isSubmitted() && $formAnnulationSortie->isValid()) {
+                $sortie->setEtat($etatRepository->rechercheParLibelle("Annulée"));
 
-            $sortie->setInfosSortie((string) $data);
+                $entityManager->persist($sortie);
+                $entityManager->flush();
 
-            // La raison d'annulation est déjà stockée dans le champ infosSortie du formulaire
-            // Pas besoin de le récupérer séparément, vous pouvez utiliser $sortie->getInfosSortie()
+                return $this->redirectToRoute('app_accueil');
+            }
 
-            $entityManager->flush();
-
-            // Redirigez vers la page d'accueil ou une autre page
-            return $this->redirectToRoute('accueil');
+            return $this->render('pages/annulerSortie.html.twig', [
+                'sortie' => $sortie,
+                'formAnnulationSortie' => $formAnnulationSortie->createView(),
+            ]);
+        } else {
+            throw new AccessDeniedException("Accès interdit. Vous n'êtes pas l'organisateur de cette sortie.");
         }
-
-        return $this->render('pages/annulerSortie.html.twig', [
-            'sortie' => $sortie,
-            'formAnnulationSortie' => $formAnnulationSortie->createView(),
-        ]);
     }
 }
