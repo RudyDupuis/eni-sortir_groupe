@@ -8,8 +8,11 @@ const longitude = document.getElementById("longitude");
 
 let donnee;
 
+const currentUrl = window.location.pathname;
+const baseUrl = currentUrl.replace("/sortie/creer", "");
+
 const TraiterSelectionLieux = (selectedVilleId) => {
-  fetch(`/ville/${selectedVilleId}/lieux`)
+  fetch(`${baseUrl}/ville/${selectedVilleId}/lieux`)
     .then((response) => response.json())
     .then((data) => {
       // Supprimer les anciennes options
