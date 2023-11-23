@@ -50,8 +50,7 @@ class SortieRepository extends ServiceEntityRepository
             // Filtrer par campus (champs campus)
             if (!empty($searchData->campus)) {
                 $query = $query
-                    ->join('s.organisateur', 'organisateur')
-                    ->join('organisateur.campus', 'campus')
+                    ->join('s.siteOrganisateur', 'campus')
                     ->andWhere('campus.nom = :campus')
                     ->setParameter('campus', $searchData->campus);
             }
